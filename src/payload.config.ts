@@ -7,6 +7,9 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Faculty } from './collections/Faculty'
+import { Notices } from './collections/Notices'
+import { Research } from './collections/Research'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -17,8 +20,11 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: '— Forensic Medicine MMC',
+    },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Faculty, Research, Notices],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

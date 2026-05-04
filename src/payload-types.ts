@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    faculty: Faculty;
+    research: Research;
+    notices: Notice;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +81,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    faculty: FacultySelect<false> | FacultySelect<true>;
+    research: ResearchSelect<false> | ResearchSelect<true>;
+    notices: NoticesSelect<false> | NoticesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -123,6 +129,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  name: string;
+  role: 'super-admin' | 'staff' | 'editor';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -163,6 +171,140 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculty".
+ */
+export interface Faculty {
+  id: string;
+  name: string;
+  nameBn?: string | null;
+  designation: 'professor-head' | 'professor' | 'associate-professor' | 'assistant-professor' | 'lecturer';
+  photo?: (string | null) | Media;
+  email?: string | null;
+  phone?: string | null;
+  qualifications?:
+    | {
+        degree: string;
+        id?: string | null;
+      }[]
+    | null;
+  specialization?: string | null;
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  bioBn?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  researchInterests?:
+    | {
+        interest: string;
+        id?: string | null;
+      }[]
+    | null;
+  publications?: number | null;
+  joinDate?: string | null;
+  /**
+   * Lower number = দেখাবে আগে
+   */
+  order?: number | null;
+  isCurrent?: boolean | null;
+  /**
+   * Auto-fill করো: example → dr-rahman
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research".
+ */
+export interface Research {
+  id: string;
+  title: string;
+  authors?:
+    | {
+        authorName: string;
+        id?: string | null;
+      }[]
+    | null;
+  facultyAuthors?: (string | Faculty)[] | null;
+  journal?: string | null;
+  publishYear: number;
+  volume?: string | null;
+  pages?: string | null;
+  doi?: string | null;
+  abstract?: string | null;
+  category: 'journal-article' | 'conference-paper' | 'book-chapter' | 'thesis';
+  file?: (string | null) | Media;
+  externalLink?: string | null;
+  isFeatured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notices".
+ */
+export interface Notice {
+  id: string;
+  title: string;
+  titleBn?: string | null;
+  category: 'academic' | 'exam' | 'administrative' | 'emergency' | 'general';
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  attachments?:
+    | {
+        file: string | Media;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  publishDate: string;
+  expiryDate?: string | null;
+  isImportant?: boolean | null;
+  isPublished?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -192,6 +334,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'faculty';
+        value: string | Faculty;
+      } | null)
+    | ({
+        relationTo: 'research';
+        value: string | Research;
+      } | null)
+    | ({
+        relationTo: 'notices';
+        value: string | Notice;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -240,6 +394,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -274,6 +430,89 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculty_select".
+ */
+export interface FacultySelect<T extends boolean = true> {
+  name?: T;
+  nameBn?: T;
+  designation?: T;
+  photo?: T;
+  email?: T;
+  phone?: T;
+  qualifications?:
+    | T
+    | {
+        degree?: T;
+        id?: T;
+      };
+  specialization?: T;
+  bio?: T;
+  bioBn?: T;
+  researchInterests?:
+    | T
+    | {
+        interest?: T;
+        id?: T;
+      };
+  publications?: T;
+  joinDate?: T;
+  order?: T;
+  isCurrent?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research_select".
+ */
+export interface ResearchSelect<T extends boolean = true> {
+  title?: T;
+  authors?:
+    | T
+    | {
+        authorName?: T;
+        id?: T;
+      };
+  facultyAuthors?: T;
+  journal?: T;
+  publishYear?: T;
+  volume?: T;
+  pages?: T;
+  doi?: T;
+  abstract?: T;
+  category?: T;
+  file?: T;
+  externalLink?: T;
+  isFeatured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notices_select".
+ */
+export interface NoticesSelect<T extends boolean = true> {
+  title?: T;
+  titleBn?: T;
+  category?: T;
+  content?: T;
+  attachments?:
+    | T
+    | {
+        file?: T;
+        label?: T;
+        id?: T;
+      };
+  publishDate?: T;
+  expiryDate?: T;
+  isImportant?: T;
+  isPublished?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
