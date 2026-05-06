@@ -86,7 +86,7 @@ export default async function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 bg-green-400/15 border border-green-400/30 text-green-300 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-green-300 inline-block" />
-              Mymensingh Medical College · Est. 1960
+              Mymensingh Medical College · Est. 1962
             </div>
             <h2 className="font-display text-white text-3xl md:text-4xl lg:text-5xl leading-tight">
               Department of
@@ -122,13 +122,13 @@ export default async function HomePage() {
             <div className="text-yellow-400 text-xs font-bold tracking-widest uppercase mb-4">
               Head of Department
             </div>
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-700 flex items-center justify-center text-3xl mb-4 ring-2 ring-yellow-400/30">
+            {/* <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-700 flex items-center justify-center text-3xl mb-4 ring-2 ring-yellow-400/30">
               👨‍⚕️
-            </div>
-            {faculty.find((f: any) => f.designation === 'professor-head') ? (
+            </div> */}
+            {faculty.find((f: any) => f.designation === 'professor') ? (
               <>
                 <div className="font-display text-white text-xl">
-                  {faculty.find((f: any) => f.designation === 'professor-head')?.name}
+                  {faculty.find((f: any) => f.designation === 'professor')?.name}
                 </div>
                 <div className="text-green-300 text-sm mt-1">Professor & Head</div>
               </>
