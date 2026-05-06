@@ -122,9 +122,6 @@ export default async function HomePage() {
             <div className="text-yellow-400 text-xs font-bold tracking-widest uppercase mb-4">
               Head of Department
             </div>
-            {/* <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-700 flex items-center justify-center text-3xl mb-4 ring-2 ring-yellow-400/30">
-              👨‍⚕️
-            </div> */}
             {faculty.find((f: any) => f.designation === 'professor') ? (
               <>
                 <div className="font-display text-white text-xl">
