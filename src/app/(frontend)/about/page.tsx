@@ -35,7 +35,7 @@ async function getHOD() {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({
     collection: 'faculty',
-    where: { designation: { equals: 'professor-head' } },
+    where: { designation: { equals: 'professor' } },
     limit: 1,
   })
   return docs[0] || null
@@ -73,15 +73,27 @@ export default async function AboutPage() {
                 <span className="w-6 h-0.5 bg-green-400 inline-block" />
                 Overview
               </div>
-
               <h2 className="font-display text-2xl text-gray-900 mb-4">
                 Department of Forensic Medicine & Toxicology
               </h2>
-
               <div className="text-gray-600 text-sm md:text-base leading-relaxed space-y-4">
                 <p>
                   The Department of Forensic Medicine & Toxicology at Mymensingh Medical College is
                   one of the oldest and most reputed forensic medicine departments in Bangladesh.
+                  Established with a vision to bridge the gap between medicine and law, the
+                  department has been serving the academic and medico-legal needs of the region for
+                  over six decades.
+                </p>
+                <p>
+                  The department offers comprehensive undergraduate and postgraduate education in
+                  forensic medicine, toxicology, and medical jurisprudence. Our faculty members are
+                  highly qualified and actively engaged in research, clinical practice, and
+                  medico-legal consultations.
+                </p>
+                <p className="font-bn text-gray-500">
+                  ময়মনসিংহ মেডিক্যাল কলেজের ফরেনসিক মেডিসিন ও টক্সিকোলজি বিভাগ বাংলাদেশের অন্যতম
+                  প্রাচীন ও সম্মানিত বিভাগ। চিকিৎসা ও আইনের মধ্যে সেতুবন্ধন তৈরির লক্ষ্যে প্রতিষ্ঠিত
+                  এই বিভাগ ছয় দশকেরও বেশি সময় ধরে শিক্ষা ও মেডিকো-লিগ্যাল সেবা প্রদান করে আসছে।
                 </p>
               </div>
             </div>
@@ -106,6 +118,60 @@ export default async function AboutPage() {
                 <p className="text-gray-600 text-sm leading-relaxed">
                   To become a center of excellence in forensic medicine...
                 </p>
+              </div>
+            </div>
+
+            {/* History */}
+            <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+              <div className="flex items-center gap-2 text-green-500 text-xs font-bold tracking-widest uppercase mb-3">
+                <span className="w-6 h-0.5 bg-green-400 inline-block" />
+                History
+              </div>
+              <h2 className="font-display text-2xl text-gray-900 mb-6">Our Journey</h2>
+              <div className="space-y-6">
+                {[
+                  {
+                    year: '1924',
+                    title: 'MMC Established',
+                    desc: 'Mymensingh Medical College was established, laying the foundation for medical education in the region.',
+                  },
+                  {
+                    year: '1962s',
+                    title: 'Department Founded',
+                    desc: 'The Department of Forensic Medicine was formally established to meet the growing need for medico-legal expertise.',
+                  },
+                  {
+                    year: '1980s',
+                    title: 'Toxicology Added',
+                    desc: 'Toxicology was incorporated into the department curriculum, expanding the scope of forensic education.',
+                  },
+                  {
+                    year: '2002s',
+                    title: 'Research Growth',
+                    desc: 'Significant growth in research output and postgraduate programs, with faculty publishing in national and international journals.',
+                  },
+                  {
+                    year: '2024',
+                    title: 'Digital Transformation',
+                    desc: 'Launch of the official department website to improve accessibility and transparency for students and the public.',
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="w-10 h-10 rounded-full bg-green-100 border-2 border-green-300 flex items-center justify-center flex-shrink-0">
+                        <span className="w-2.5 h-2.5 rounded-full bg-green-500 inline-block" />
+                      </div>
+                      {i < 4 && <div className="w-0.5 h-full bg-green-100 mt-1" />}
+                    </div>
+                    <div className="pb-6">
+                      <div className="text-green-600 text-xs font-bold tracking-widest uppercase mb-1">
+                        {item.year}
+                      </div>
+                      <div className="font-semibold text-gray-900 mb-1">{item.title}</div>
+                      <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -176,7 +242,7 @@ export default async function AboutPage() {
                 <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden bg-green-700 flex items-center justify-center ring-2 ring-yellow-400/30">
                   {(hod.photo as any)?.url ? (
                     <img
-                      src={`http://localhost:3000${(hod.photo as any).url}`}
+                      src={`${process.env.NEXT_PUBLIC_PAYLOAD_URL}${(hod.photo as any).url}`}
                       alt={hod.name}
                       className="w-full h-full object-cover"
                     />
@@ -208,7 +274,6 @@ export default async function AboutPage() {
                   { icon: Users, label: 'Faculty Members', href: '/faculty' },
                   { icon: Bell, label: 'Notice Board', href: '/notices' },
                   { icon: Microscope, label: 'Research', href: '/research' },
-                  { icon: Calendar, label: 'Book Appointment', href: '/appointment' },
                   { icon: Phone, label: 'Contact Us', href: '/contact' },
                 ].map((link, i) => {
                   const Icon = link.icon
