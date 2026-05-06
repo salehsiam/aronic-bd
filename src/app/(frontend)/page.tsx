@@ -1,7 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Bell, Users } from 'lucide-react'
 import {
   FileText,
@@ -66,7 +65,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* ── HERO ── */}
-      <section className="relative bg-green-900 min-h-[480px] flex items-center overflow-hidden">
+      <section className="relative bg-green-900 min-h-120 flex items-center overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -170,7 +169,8 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {notices.length > 0 ? (
               notices.map((notice: any) => {
-                const config = noticeConfig[notice.category] || noticeConfig.default
+                const config =
+                  noticeConfig[notice.category as keyof typeof noticeConfig] ?? noticeConfig.default
 
                 return (
                   <Link

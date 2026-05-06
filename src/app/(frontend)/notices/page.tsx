@@ -35,7 +35,7 @@ async function getNotices() {
   return docs
 }
 
-const categoryConfig: Record<string, { bg: string; text: string; icon: JSX.Element }> = {
+const categoryConfig: Record<string, { bg: string; text: string; icon: any }> = {
   exam: {
     bg: 'bg-yellow-100',
     text: 'text-yellow-800',

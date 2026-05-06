@@ -78,9 +78,9 @@ export default async function FacultyPage() {
         {hod && (
           <div className="bg-gradient-to-br from-green-900 to-green-700 rounded-2xl p-6 md:p-8 mb-12 flex flex-col md:flex-row gap-6 items-center md:items-start">
             <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-green-600 flex-shrink-0 flex items-center justify-center ring-4 ring-yellow-400/40 overflow-hidden">
-              {hod.photo?.url ? (
+              {(hod.photo as any)?.url ? (
                 <img
-                  src={`http://localhost:3000${hod.photo.url}`}
+                  src={`${process.env.NEXT_PUBLIC_SERVER_URL}${(hod.photo as any).url}`}
                   alt={hod.name}
                   className="w-full h-full object-cover"
                 />
@@ -95,9 +95,9 @@ export default async function FacultyPage() {
               </div>
               <h2 className="font-display text-white text-2xl md:text-3xl">{hod.name}</h2>
               {hod.nameBn && <p className="font-bn text-green-300 text-base mt-1">{hod.nameBn}</p>}
-              {hod.qualifications?.length > 0 && (
+              {(hod.qualifications as any)?.length > 0 && (
                 <p className="text-green-200 text-sm mt-2">
-                  {hod.qualifications.map((q: any) => q.degree).join(', ')}
+                  {(hod.qualifications as any).map((q: any) => q.degree).join(', ')}
                 </p>
               )}
               {hod.specialization && (
