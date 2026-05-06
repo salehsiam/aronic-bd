@@ -10,6 +10,7 @@ import { Media } from './collections/Media'
 import { Faculty } from './collections/Faculty'
 import { Notices } from './collections/Notices'
 import { Research } from './collections/Research'
+import { Gallery } from './collections/Gallery'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,7 +25,7 @@ export default buildConfig({
       titleSuffix: '— Forensic Medicine MMC',
     },
   },
-  collections: [Users, Media, Faculty, Research, Notices],
+  collections: [Users, Media, Faculty, Research, Notices, Gallery],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -33,6 +34,11 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
+  upload: {
+    limits: {
+      fileSize: 10000000, // 10MB
+    },
+  },
   sharp,
   plugins: [],
 })

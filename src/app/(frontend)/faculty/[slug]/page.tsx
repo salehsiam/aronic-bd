@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
 async function getFacultyMember(slug: string) {
   const payload = await getPayload({ config })
@@ -38,7 +39,30 @@ const designationLabel: Record<string, string> = {
   'assistant-professor': 'Assistant Professor',
   lecturer: 'Lecturer',
 }
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const member = await getFacultyMember(slug)
 
+  if (!member) {
+    return { title: 'Faculty Not Found' }
+  }
+
+  return {
+    title: member.name,
+    description: `Profile of ${member.name}, ${member.designation?.replace(/-/g, ' ')} at the Department of Forensic Medicine & Toxicology, Mymensingh Medical College.`,
+    openGraph: {
+      title: `${member.name} — Forensic Medicine MMC`,
+      description: `${member.name} — ${member.designation?.replace(/-/g, ' ')} at MMC Forensic Medicine Department.`,
+      images: (member.photo as any)?.url
+        ? [`http://localhost:3000${(member.photo as any).url}`]
+        : [],
+    },
+  }
+}
 export default async function FacultyDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const member = await getFacultyMember(slug)

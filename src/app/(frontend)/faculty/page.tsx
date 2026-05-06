@@ -2,6 +2,16 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
 import { User, Mail, Phone, ArrowRight } from 'lucide-react'
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
+  title: 'Faculty Members',
+  description:
+    'Meet the dedicated faculty members of the Department of Forensic Medicine & Toxicology at Mymensingh Medical College.',
+  openGraph: {
+    title: 'Faculty — Forensic Medicine & Toxicology MMC',
+    description: 'Meet our expert forensic medicine faculty members.',
+  },
+}
 
 async function getFaculty() {
   const payload = await getPayload({ config })
@@ -148,7 +158,7 @@ export default async function FacultyPage() {
                       <div className="h-40 md:h-48 relative bg-gradient-to-br from-green-800 to-green-600 overflow-hidden">
                         {member.photo?.url ? (
                           <img
-                            src={`http://localhost:3000${member.photo.url}`}
+                            src={`${process.env.NEXT_PUBLIC_SERVER_URL}${member.photo.url}`}
                             alt={member.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />

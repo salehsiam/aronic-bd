@@ -87,7 +87,7 @@ export default async function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 bg-green-400/15 border border-green-400/30 text-green-300 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-green-300 inline-block" />
-              Mymensingh Medical College · Est. 1924
+              Mymensingh Medical College · Est. 1960
             </div>
             <h2 className="font-display text-white text-3xl md:text-4xl lg:text-5xl leading-tight">
               Department of
@@ -258,12 +258,10 @@ export default async function HomePage() {
   }`}
                   >
                     {member.photo && member.photo.url ? (
-                      <Image
-                        src={member.photo.url}
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_SERVER_URL}${member.photo.url}`}
                         alt={member.photo.alt || member.name}
-                        width={400}
-                        height={400}
-                        className="object-cover w-full h-full"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-5xl">

@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import {
   Target,
   Eye,
@@ -20,6 +21,15 @@ import {
   FileText,
   Building2,
 } from 'lucide-react'
+export const metadata: Metadata = {
+  title: 'About the Department',
+  description:
+    'Learn about the history, mission, vision, and services of the Department of Forensic Medicine & Toxicology at Mymensingh Medical College.',
+  openGraph: {
+    title: 'About — Forensic Medicine & Toxicology MMC',
+    description: 'History, mission, vision, and services of our department.',
+  },
+}
 
 async function getHOD() {
   const payload = await getPayload({ config })

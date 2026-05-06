@@ -12,6 +12,17 @@ import {
   ArrowRight,
   Clock,
 } from 'lucide-react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Notice Board',
+  description:
+    'Official notices and announcements from the Department of Forensic Medicine & Toxicology, Mymensingh Medical College.',
+  openGraph: {
+    title: 'Notices — Forensic Medicine & Toxicology MMC',
+    description: 'Latest notices and announcements from our department.',
+  },
+}
 
 async function getNotices() {
   const payload = await getPayload({ config })
