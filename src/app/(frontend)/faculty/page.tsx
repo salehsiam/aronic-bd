@@ -80,7 +80,7 @@ export default async function FacultyPage() {
             <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-green-600 flex-shrink-0 flex items-center justify-center ring-4 ring-yellow-400/40 overflow-hidden">
               {(hod.photo as any)?.url ? (
                 <img
-                  src={`${process.env.NEXT_PUBLIC_SERVER_URL}${(hod.photo as any).url}`}
+                  src={hod.photo.cloudinaryUrl || hod.photo.url || ''}
                   alt={hod.name}
                   className="w-full h-full object-cover"
                 />
@@ -158,7 +158,7 @@ export default async function FacultyPage() {
                       <div className="h-40 md:h-48 relative bg-gradient-to-br from-green-800 to-green-600 overflow-hidden">
                         {member.photo?.url ? (
                           <img
-                            src={`${process.env.NEXT_PUBLIC_SERVER_URL}${member.photo.url}`}
+                            src={member.photo.cloudinaryUrl || member.photo.url || ''}
                             alt={member.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />

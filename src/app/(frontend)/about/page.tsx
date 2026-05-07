@@ -237,7 +237,7 @@ export default async function AboutPage() {
           {/* ── SIDEBAR ── */}
           <div className="space-y-6">
             {/* HOD Message */}
-            {hod && (
+            {/* {hod && (
               <div className="bg-green-900 rounded-xl p-5 text-center">
                 <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden bg-green-700 flex items-center justify-center ring-2 ring-yellow-400/30">
                   {(hod.photo as any)?.url ? (
@@ -263,7 +263,7 @@ export default async function AboutPage() {
                   View Profile →
                 </Link>
               </div>
-            )}
+            )} */}
 
             {/* Quick Links */}
             <div className="bg-white border border-gray-200 rounded-xl p-5">

@@ -122,19 +122,17 @@ export default async function HomePage() {
             <div className="text-yellow-400 text-xs font-bold tracking-widest uppercase mb-4">
               Head of Department
             </div>
-            {faculty.find((f: any) => f.designation === 'professor') ? (
+            {faculty.find((f: any) => f.designation === 'professor-head') ? (
               <>
                 <div className="font-display text-white text-xl">
-                  {faculty.find((f: any) => f.designation === 'professor')?.name}
+                  {faculty.find((f: any) => f.designation === 'professor-head')?.name}
                 </div>
                 <div className="text-green-300 text-sm mt-1">Professor & Head</div>
               </>
             ) : (
               <>
-                <div className="font-display text-white text-xl">
-                  Prof. Dr. Mohammad Abdur Rahman
-                </div>
-                <div className="text-green-300 text-sm mt-1">Professor & Head</div>
+                <div className="font-display text-white text-xl"></div>
+                <div className="text-green-300 text-sm mt-1"></div>
               </>
             )}
             <div className="text-white/55 text-sm leading-relaxed mt-4 pt-4 border-t border-white/10 italic">
@@ -256,7 +254,7 @@ export default async function HomePage() {
                   >
                     {member.photo && member.photo.url ? (
                       <img
-                        src={`${process.env.NEXT_PUBLIC_SERVER_URL}${member.photo.url}`}
+                        src={member.photo.cloudinaryUrl || member.photo.url || ''}
                         alt={member.photo.alt || member.name}
                         className="w-full h-full object-cover"
                       />
@@ -318,7 +316,7 @@ export default async function HomePage() {
               research.map((item: any) => (
                 <div
                   key={item.id}
-                  className="bg-white border border-gray-200 rounded-xl p-4 md:p-6 flex gap-4 md:gap-10 hover:shadow-md transition-all"
+                  className="bg-white border border-gray-200 rounded-xl p-4 md:p-6 flex gap-8 md:gap-10 hover:shadow-md transition-all"
                 >
                   <div className="font-display text-3xl md:text-4xl text-green-200 flex-shrink-0 w-12 md:w-14 leading-none mt-1">
                     {item.publishYear}

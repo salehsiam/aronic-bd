@@ -52,10 +52,10 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="max-w-6xl mx-auto px-6 mt-10 py-5 border-t border-white/10 flex justify-between items-center text-xs">
+      {/* <div className="max-w-6xl mx-auto px-6 mt-10 py-5 border-t border-white/10 flex justify-between items-center text-xs">
         <span>© 2025 Forensic Medicine Dept., Mymensingh Medical College.</span>
         <span className="text-green-400">Designed & Developed with ❤️</span>
-      </div>
+      </div> */}
     </footer>
   )
 }

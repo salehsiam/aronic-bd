@@ -98,7 +98,7 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
                   className="w-full h-full object-cover"
                 />
               ) : (
-                '👨‍⚕️'
+                ''
               )}
             </div>
 
@@ -308,7 +308,7 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
             )}
 
             {/* Book Appointment */}
-            <div className="bg-green-900 rounded-xl p-5 text-center">
+            {/* <div className="bg-green-900 rounded-xl p-5 text-center">
               <div className="text-2xl mb-2">📅</div>
               <h3 className="font-display text-white text-lg mb-2">Book Appointment</h3>
               <p className="text-white/60 text-xs mb-4">
@@ -320,7 +320,7 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
               >
                 Book Now
               </Link>
-            </div>
+            </div> */}
 
             {/* Back */}
             <Link
