@@ -78,7 +78,7 @@ export default async function FacultyPage() {
         {hod && (
           <div className="bg-gradient-to-br from-green-900 to-green-700 rounded-2xl p-6 md:p-8 mb-12 flex flex-col md:flex-row gap-6 items-center md:items-start">
             <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-green-600 flex-shrink-0 flex items-center justify-center ring-4 ring-yellow-400/40 overflow-hidden">
-              {(hod.photo as any)?.url ? (
+              {(hod?.photo as any)?.url ? (
                 <img
                   src={(hod.photo as any).cloudinaryUrl || (hod.photo as any).url || ''}
                   alt={hod.name}
@@ -159,7 +159,9 @@ export default async function FacultyPage() {
                         {member.photo?.url ? (
                           <img
                             src={
-                              (member.photo as any).cloudinaryUrl || (member.photo as any).url || ''
+                              (member?.photo as any).cloudinaryUrl ||
+                              (member?.photo as any).url ||
+                              ''
                             }
                             alt={member.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
