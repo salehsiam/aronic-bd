@@ -1,5 +1,7 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
+import { v2 as cloudinary } from 'cloudinary'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -14,6 +16,46 @@ import { Gallery } from './collections/Gallery'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+  api_key: process.env.CLOUDINARY_API_KEY || '',
+  api_secret: process.env.CLOUDINARY_API_SECRET || '',
+})
+
+const cloudinaryAdapter = {
+  name: 'cloudinary',
+  handleUpload: async ({ data, file }: any) => {
+    const result = await new Promise<any>((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            folder: 'forensic-mmc',
+            resource_type: 'auto',
+            public_id: `${Date.now()}-${file.filename.replace(/\.[^/.]+$/, '')}`,
+          },
+          (error, result) => {
+            if (error) reject(error)
+            else resolve(result)
+          },
+        )
+        .end(file.buffer)
+    })
+    return {
+      ...data,
+      url: result.secure_url,
+      filename: result.public_id,
+    }
+  },
+  handleDelete: async ({ doc }: any) => {
+    if (doc?.filename) {
+      await cloudinary.uploader.destroy(doc.filename)
+    }
+  },
+  generateURL: ({ filename }: any) => {
+    return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${filename}`
+  },
+}
 
 export default buildConfig({
   admin: {
@@ -34,6 +76,15 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  plugins: [],
+  plugins: [
+    cloudStoragePlugin({
+      collections: {
+        media: {
+          adapter: () => cloudinaryAdapter as any,
+          disableLocalStorage: true,
+        },
+      },
+    }),
+  ],
   sharp,
 })
