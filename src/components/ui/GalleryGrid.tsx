@@ -36,7 +36,7 @@ export default function GalleryGrid({
           >
             {item.image?.url ? (
               <img
-                src={`${process.env.NEXT_PUBLIC_SERVER_URL}${item.image.url}`}
+                src={item.image.url || ''}
                 alt={item.image.alt || item.caption || albumTitle}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
