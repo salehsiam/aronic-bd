@@ -58,9 +58,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${member.name} — Forensic Medicine MMC`,
       description: `${member.name} — ${member.designation?.replace(/-/g, ' ')} at MMC Forensic Medicine Department.`,
-      images: (member.photo as any)?.url
-        ? [`${process.env.NEXT_PUBLIC_SERVER_URL}${(member.photo as any).url}`]
-        : [],
+      images: (member.photo as any)?.url ? [{ url: (member.photo as any).url }] : [],
     },
   }
 }
@@ -94,7 +92,7 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
             <div className="w-32 h-32 md:w-44 md:h-44 rounded-full flex-shrink-0 overflow-hidden ring-4 ring-yellow-400/30 bg-green-700 flex items-center justify-center text-6xl">
               {(member.photo as any)?.url ? (
                 <img
-                  src={`${process.env.NEXT_PUBLIC_SERVER_URL}${(member.photo as any).url}`}
+                  src={member.photo.url}
                   alt={member.name}
                   className="w-full h-full object-cover"
                 />
