@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import logo from './../../../public/logo.png'
+import { Phone } from 'lucide-react'
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -42,10 +43,12 @@ export default function Header() {
 
           {/* Appointment button — desktop */}
           <Link
-            href="/appointment"
+            href="/contact"
             className="hidden md:block bg-yellow-500 hover:bg-yellow-400 text-green-900 text-sm font-bold px-5 py-2 rounded transition-colors flex-shrink-0"
           >
-            📅 Book Appointment
+            <p className="flex items-center gap-1">
+              <Phone className="w-4 h-4" /> Contact Us
+            </p>
           </Link>
 
           {/* Hamburger — mobile */}
@@ -122,11 +125,11 @@ export default function Header() {
             })}
             {/* Appointment button mobile */}
             <Link
-              href="/appointment"
+              href="/contact"
               onClick={() => setMenuOpen(false)}
               className="mt-2 bg-yellow-500 hover:bg-yellow-400 text-green-900 text-sm font-bold px-4 py-2.5 rounded text-center transition-colors"
             >
-              📅 Book Appointment
+              Contact Us
             </Link>
           </div>
         </div>

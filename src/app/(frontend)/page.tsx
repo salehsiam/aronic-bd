@@ -118,27 +118,16 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* HOD Card — desktop only */}
+          {/* Quote Card — desktop only */}
           <div className="hidden lg:block bg-white/6 border border-white/12 rounded-2xl p-7 backdrop-blur-sm">
-            <div className="text-yellow-400 text-xs font-bold tracking-widest uppercase mb-4">
-              Head of Department
-            </div>
-            {faculty.find((f: any) => f.designation === 'professor-head') ? (
-              <>
-                <div className="font-display text-white text-xl">
-                  {faculty.find((f: any) => f.designation === 'professor-head')?.name}
-                </div>
-                <div className="text-green-300 text-sm mt-1">Professor & Head</div>
-              </>
-            ) : (
-              <>
-                <div className="font-display text-white text-xl"></div>
-                <div className="text-green-300 text-sm mt-1"></div>
-              </>
-            )}
-            <div className="text-white/55 text-sm leading-relaxed mt-4 pt-4 border-t border-white/10 italic">
-              "Our department strives to bridge the gap between medicine and law, training future
-              physicians to serve justice and society."
+            <div className="text-yellow-400 text-4xl mb-4 font-display">"</div>
+            <p className="text-white/80 text-lg font-display italic leading-relaxed">
+              The practice of medicine is an art, not a trade; a calling, not a business; a calling
+              in which your heart will be exercised equally with your head.
+            </p>
+            <div className="mt-6 pt-4 border-t border-white/10">
+              <div className="text-green-300 text-sm font-semibold">— Sir William Osler</div>
+              <div className="text-white/40 text-xs mt-1">Father of Modern Medicine</div>
             </div>
           </div>
         </div>
@@ -246,7 +235,7 @@ export default async function HomePage() {
                   className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all"
                 >
                   <div
-                    className={`h-36 md:h-44 relative overflow-hidden
+                    className={`h-36 md:h-60 relative overflow-hidden
   ${
     member.designation === 'professor-head'
       ? 'bg-gradient-to-br from-green-900 to-green-700'
