@@ -92,7 +92,7 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
             <div className="w-32 h-32 md:w-44 md:h-44 rounded-full flex-shrink-0 overflow-hidden ring-4 ring-yellow-400/30 bg-green-700 flex items-center justify-center text-6xl">
               {(member.photo as any)?.url ? (
                 <img
-                  src={member.photo.url}
+                  src={(member.photo as any).url}
                   alt={member.name}
                   className="w-full h-full object-cover"
                 />
