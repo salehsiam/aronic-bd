@@ -3,6 +3,7 @@ import config from '@payload-config'
 import Link from 'next/link'
 import { User, Mail, Phone, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
+export const revalidate = 0
 export const metadata: Metadata = {
   title: 'Faculty Members',
   description:

@@ -10,6 +10,7 @@ import {
   CalendarDays,
   ArrowRight,
 } from 'lucide-react'
+export const revalidate = 0
 
 const noticeConfig = {
   exam: {

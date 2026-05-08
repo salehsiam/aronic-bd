@@ -13,6 +13,7 @@ import {
   Link as LinkIcon,
 } from 'lucide-react'
 import type { Metadata } from 'next'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: 'Research & Publications',

@@ -3,6 +3,7 @@ import config from '@payload-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+export const revalidate = 0
 
 async function getFacultyMember(slug: string) {
   const payload = await getPayload({ config })
