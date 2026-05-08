@@ -203,7 +203,7 @@ export default async function ResearchPage() {
                         )}
                         {item.file?.url && (
                           <a
-                            href={`http://localhost:3000${item.file.url}`}
+                            href={item.file.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-red-600 font-semibold hover:underline flex items-center gap-1"
@@ -317,7 +317,7 @@ export default async function ResearchPage() {
                             )}
                             {item.file?.url && (
                               <a
-                                href={`http://localhost:3000${item.file.url}`}
+                                href={item.file.url}
                                 target="_blank"
                                 className="text-xs text-red-600 font-semibold hover:underline flex items-center gap-1"
                               >

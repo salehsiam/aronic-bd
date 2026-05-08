@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer'
 import Marquee from '@/components/layout/Marquee'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
   title: {
     default: 'Forensic Medicine & Toxicology — Mymensingh Medical College',
     template: '%s | Forensic Medicine MMC',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_BD',
-    url: 'http://localhost:3000',
+    url: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
     siteName: 'Forensic Medicine & Toxicology — MMC',
     title: 'Department of Forensic Medicine & Toxicology — Mymensingh Medical College',
     description:

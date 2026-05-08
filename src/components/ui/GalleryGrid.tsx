@@ -88,7 +88,7 @@ export default function GalleryGrid({
           <div onClick={(e) => e.stopPropagation()} className="max-w-4xl max-h-[85vh] relative">
             {images[lightbox]?.image?.url ? (
               <img
-                src={`http://localhost:3000${images[lightbox].image.url}`}
+                src={images[lightbox].image.url}
                 alt={images[lightbox].image.alt || albumTitle}
                 className="max-w-full max-h-[80vh] object-contain rounded-lg"
               />
