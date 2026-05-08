@@ -27,12 +27,14 @@ export const Media: CollectionConfig = {
         if (operation === 'create' && req.file) {
           try {
             const fileBuffer = req.file.data
+            const isPDF = req.file.mimetype === 'application/pdf'
+
             const result = await new Promise<any>((resolve, reject) => {
               cloudinary.uploader
                 .upload_stream(
                   {
                     folder: 'forensic-mmc',
-                    resource_type: 'auto',
+                    resource_type: isPDF ? 'raw' : 'auto',
                     public_id: `${Date.now()}-${req.file!.name.replace(/\.[^/.]+$/, '')}`,
                   },
                   (error, result) => {
