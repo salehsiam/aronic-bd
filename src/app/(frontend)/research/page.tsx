@@ -204,7 +204,7 @@ export default async function ResearchPage() {
                         )}
                         {item.file?.url && (
                           <a
-                            href={item.file.url}
+                            href={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file.url)}&embedded=false`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-red-600 font-semibold hover:underline flex items-center gap-1"
@@ -318,11 +318,11 @@ export default async function ResearchPage() {
                             )}
                             {item.file?.url && (
                               <a
-                                href={item.file.url}
+                                href={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file.url)}&embedded=false`}
                                 target="_blank"
                                 className="text-xs text-red-600 font-semibold hover:underline flex items-center gap-1"
                               >
-                                <FileText className="w-3 h-3" /> Download PDF
+                                <FileText className="w-3 h-3" /> PDF
                               </a>
                             )}
                           </div>

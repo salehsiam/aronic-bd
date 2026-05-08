@@ -17,7 +17,7 @@ export const Media: CollectionConfig = {
     afterRead: [
       ({ doc }) => {
         if (doc?.cloudinaryUrl) {
-          doc.url = doc.cloudinaryUrl
+          doc.url = doc.cloudinaryUrl // শুধু এটুকু রাখো
         }
         return doc
       },
