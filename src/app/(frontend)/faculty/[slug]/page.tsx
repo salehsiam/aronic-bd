@@ -3,6 +3,7 @@ import config from '@payload-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import RichText from '@/components/ui/RichText'
 export const revalidate = 0
 
 async function getFacultyMember(slug: string) {
@@ -161,10 +162,7 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
             {member.bio && (
               <div className="bg-white border border-gray-200 rounded-xl p-6">
                 <h2 className="font-display text-xl text-gray-900 mb-4">Biography</h2>
-                <div className="text-gray-600 text-sm leading-relaxed prose max-w-none">
-                  {/* RichText content */}
-                  <p>Biography content will render here.</p>
-                </div>
+                <RichText content={member.bio} />
               </div>
             )}
 

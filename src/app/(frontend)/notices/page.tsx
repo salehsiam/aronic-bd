@@ -119,7 +119,8 @@ export default async function NoticesPage() {
                 .map((notice: any) => {
                   const cat = categoryConfig[notice.category] || categoryConfig.general
                   return (
-                    <div
+                    <Link
+                      href={`/notices/${notice.id}`}
                       key={notice.id}
                       className="bg-white border-l-4 border-l-red-400 border border-gray-200 rounded-xl p-4 md:p-5 flex gap-4 hover:shadow-md transition-all"
                     >
@@ -160,7 +161,7 @@ export default async function NoticesPage() {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   )
                 })}
             </div>
@@ -184,7 +185,8 @@ export default async function NoticesPage() {
               {notices.map((notice: any) => {
                 const cat = categoryConfig[notice.category] || categoryConfig.general
                 return (
-                  <div
+                  <Link
+                    href={`/notices/${notice.id}`}
                     key={notice.id}
                     className={`bg-white border rounded-xl p-4 md:p-5 flex gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all
                       ${notice.isImportant ? 'border-l-4 border-l-green-400 border-gray-200' : 'border-gray-200'}`}
@@ -250,7 +252,7 @@ export default async function NoticesPage() {
                     <div className="text-gray-300 flex-shrink-0 self-center text-lg">
                       <ArrowRight className="w-5 h-5 text-gray-300" />
                     </div>
-                  </div>
+                  </Link>
                 )
               })}
             </div>
