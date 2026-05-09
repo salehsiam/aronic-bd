@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { Calendar, Paperclip, AlertCircle, ArrowLeft, Tag, ChevronRight } from 'lucide-react'
 import type { Metadata } from 'next'
 import RichText from '@/components/ui/RichText'
+import PrintButton from '@/components/ui/PrintButton'
 
 export const revalidate = 0
 
@@ -87,8 +88,35 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div>
-      {/* ── PAGE HEADER ── */}
-      <div className={`py-12 md:py-16 ${notice.isImportant ? 'bg-red-900' : 'bg-green-900'}`}>
+      {/* ── PRINT HEADER — শুধু print-এ দেখাবে ── */}
+      <div className="hidden print:block p-8 border-b-2 border-gray-900">
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">
+              Department of Forensic Medicine & Toxicology
+            </h1>
+            <p className="text-base text-gray-700">Mymensingh Medical College</p>
+            <p className="text-sm text-gray-500">Mymensingh – 2200, Bangladesh</p>
+          </div>
+          <div className="text-right text-sm text-gray-500">
+            <p>Phone: +880 91-XXXXXXX</p>
+            <p>Email: mmc.forensicmedicine@gmail.com</p>
+            <p>
+              Printed:{' '}
+              {new Date().toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── PAGE HEADER — web only ── */}
+      <div
+        className={`print:hidden py-12 md:py-16 ${notice.isImportant ? 'bg-red-900' : 'bg-green-900'}`}
+      >
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-green-300 text-xs font-bold tracking-widest uppercase mb-4 flex-wrap">
@@ -155,17 +183,56 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
       </div>
 
       {/* ── CONTENT ── */}
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-14">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-14 print:py-6 print:px-0 print:max-w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 print:block">
           {/* ── MAIN CONTENT ── */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Print Notice Title */}
+            <div className="hidden print:block mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 border border-gray-400 rounded">
+                  {notice.category as string}
+                </span>
+                {notice.isImportant && (
+                  <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 border border-gray-900 rounded">
+                    ⚠ IMPORTANT
+                  </span>
+                )}
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">{notice.title}</h2>
+              {notice.titleBn && <p className="text-lg text-gray-600">{notice.titleBn}</p>}
+              <div className="flex gap-6 mt-3 text-sm text-gray-600">
+                <span>
+                  Published:{' '}
+                  {new Date(notice.publishDate as string).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </span>
+                {notice.expiryDate && (
+                  <span>
+                    Expires:{' '}
+                    {new Date(notice.expiryDate as string).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
+                  </span>
+                )}
+              </div>
+              <hr className="mt-4 border-gray-400" />
+            </div>
+
             {/* Notice Content */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
-              <h2 className="font-display text-xl text-gray-900 mb-4">Notice Details</h2>
+            <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8 print:border-0 print:p-0 print:rounded-none">
+              <h2 className="font-display text-xl text-gray-900 mb-4 print:hidden">
+                Notice Details
+              </h2>
               {notice.content ? (
                 <RichText content={notice.content} />
               ) : (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-gray-400 print:hidden">
                   <div className="text-4xl mb-3">{cat.icon}</div>
                   <p className="text-sm">No additional content for this notice.</p>
                   <p className="text-xs mt-1">Please check the attachments below if available.</p>
@@ -175,64 +242,77 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
 
             {/* Attachments */}
             {notice.attachments && (notice.attachments as any[]).length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-xl p-6">
+              <div className="bg-white border border-gray-200 rounded-xl p-6 print:border-0 print:p-0 print:mt-6">
                 <h2 className="font-display text-xl text-gray-900 mb-4 flex items-center gap-2">
-                  <Paperclip className="w-5 h-5 text-green-500" />
+                  <Paperclip className="w-5 h-5 text-green-500 print:hidden" />
                   Attachments
                 </h2>
                 <div className="space-y-3">
                   {(notice.attachments as any[]).map((attachment: any, i: number) => (
-                    <a
-                      key={i}
-                      href={`https://docs.google.com/viewer?url=${encodeURIComponent(attachment.file?.url || '')}&embedded=false`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 md:p-4 bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-200 rounded-xl transition-all group"
-                    >
-                      <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl">📄</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-gray-900 truncate">
-                          {attachment.label || `Attachment ${i + 1}`}
+                    <div key={i}>
+                      {/* Web view */}
+                      <a
+                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(attachment.file?.url || '')}&embedded=false`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="print:hidden flex items-center gap-3 p-3 md:p-4 bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-200 rounded-xl transition-all group"
+                      >
+                        <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <span className="text-2xl">📄</span>
                         </div>
-                        <div className="text-xs text-gray-400 mt-0.5">Click to view PDF</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-semibold text-gray-900 truncate">
+                            {attachment.label || `Attachment ${i + 1}`}
+                          </div>
+                          <div className="text-xs text-gray-400 mt-0.5">Click to view PDF</div>
+                        </div>
+                        <div className="flex-shrink-0 flex items-center gap-1 text-green-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                          View <ChevronRight className="w-4 h-4" />
+                        </div>
+                      </a>
+                      {/* Print view */}
+                      <div className="hidden print:flex items-center gap-2 py-2 border-b border-gray-200">
+                        <span>📄</span>
+                        <span className="text-sm">{attachment.label || `Attachment ${i + 1}`}</span>
                       </div>
-                      <div className="flex-shrink-0 flex items-center gap-1 text-green-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                        View <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </a>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Important Warning */}
-            {notice.isImportant && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-5 flex gap-3">
-                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-red-700 font-bold text-sm mb-1">Important Notice</div>
-                  <p className="text-red-600 text-xs leading-relaxed">
-                    This is an important notice. Please read carefully and take necessary action
-                    before the deadline.
-                  </p>
+            {/* Print Signature */}
+            <div className="hidden print:block mt-16">
+              <div className="flex justify-between items-end">
+                <div className="text-center">
+                  <div className="border-t border-gray-900 w-48 mb-2" />
+                  <p className="text-sm font-semibold">Authorized Signature</p>
+                  <p className="text-xs text-gray-600">Head of Department</p>
+                  <p className="text-xs text-gray-600">Dept. of Forensic Medicine & Toxicology</p>
+                  <p className="text-xs text-gray-600">Mymensingh Medical College</p>
+                </div>
+                <div className="text-center">
+                  <div className="border-t border-gray-900 w-48 mb-2" />
+                  <p className="text-sm font-semibold">Official Seal</p>
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* Back Button */}
-            <Link
-              href="/notices"
-              className="inline-flex items-center gap-2 text-green-600 font-semibold text-sm hover:gap-3 transition-all"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to All Notices
-            </Link>
+            {/* Action Buttons — web only */}
+            <div className="print:hidden flex flex-wrap items-center gap-3 mt-2">
+              <PrintButton />
+              <Link
+                href="/notices"
+                className="inline-flex items-center gap-2 text-green-600 font-semibold text-sm hover:gap-3 transition-all"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to All Notices
+              </Link>
+            </div>
           </div>
 
-          {/* ── SIDEBAR ── */}
-          <div className="space-y-5">
+          {/* ── SIDEBAR — web only ── */}
+          <div className="space-y-5 print:hidden">
             {/* Notice Info */}
             <div className="bg-white border border-gray-200 rounded-xl p-5">
               <h3 className="font-display text-lg text-gray-900 mb-4">Notice Info</h3>

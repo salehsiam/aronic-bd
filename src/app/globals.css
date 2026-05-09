@@ -6,3 +6,48 @@
   /* body { font-family: 'DM Sans', sans-serif; color: #111a14; overflow-x: hidden; }
   h1, h2, h3, h4 { font-family: 'DM Serif Display', Georgia, serif; } */
 }
+
+@media print {
+  /* Hide everything except print content */
+  .no-print,
+  header,
+  footer,
+  nav,
+  .marquee-bar {
+    display: none !important;
+  }
+
+  /* Show print content */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 20mm;
+    size: A4;
+  }
+
+  body {
+    font-family: 'Times New Roman', serif;
+    color: #000;
+    background: #fff;
+  }
+
+  /* Print container */
+  .print-container {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  /* Links */
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  /* Page break */
+  .page-break {
+    page-break-before: always;
+  }
+}

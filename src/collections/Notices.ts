@@ -45,7 +45,7 @@ export const Notices: CollectionConfig = {
           name: 'file',
           type: 'upload',
           relationTo: 'media',
-          required: true,
+          // required: true,
         },
         {
           name: 'label',

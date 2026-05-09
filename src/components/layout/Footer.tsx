@@ -44,7 +44,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5 text-sm text-white/60">
                 <Mail className="w-4 h-4 text-green-400 flex-shrink-0" />
-                <span>forensic@mmc.edu.bd</span>
+                <span>mmc.forensicmedicine@gmail.com</span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-white/60">
                 <Phone className="w-4 h-4 text-green-400 flex-shrink-0" />
