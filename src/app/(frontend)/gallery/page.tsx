@@ -125,16 +125,16 @@ export default async function GalleryPage() {
               return (
                 <div key={album.id}>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
+                    <div className="">
                       <span
-                        className={`text-xs font-bold uppercase flex items-center gap-1 tracking-wider px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}
+                        className={`text-xs font-bold uppercase inline-flex items-center gap-1 tracking-wider px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}
                       >
                         {cat.icon} {album.category}
                       </span>
                       <h2 className="font-display text-xl text-gray-900">{album.title}</h2>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className=" md:flex items-center gap-3">
                       {album.date && (
                         <span className="text-xs text-gray-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />

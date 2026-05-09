@@ -124,13 +124,13 @@ export default function Header() {
               )
             })}
             {/* Appointment button mobile */}
-            <Link
+            {/* <Link
               href="/contact"
               onClick={() => setMenuOpen(false)}
               className="mt-2 bg-yellow-500 hover:bg-yellow-400 text-green-900 text-sm font-bold px-4 py-2.5 rounded text-center transition-colors"
             >
               Contact Us
-            </Link>
+            </Link> */}
           </div>
         </div>
       )}
