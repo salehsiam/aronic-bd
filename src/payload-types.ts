@@ -295,7 +295,7 @@ export interface Notice {
   } | null;
   attachments?:
     | {
-        file?: (string | null) | Media;
+        file: string | Media;
         label?: string | null;
         id?: string | null;
       }[]
