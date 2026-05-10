@@ -2,7 +2,18 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Calendar, Paperclip, AlertCircle, ArrowLeft, Tag, ChevronRight } from 'lucide-react'
+import {
+  Calendar,
+  Paperclip,
+  AlertCircle,
+  ArrowLeft,
+  Tag,
+  ChevronRight,
+  MapPin,
+  Mail,
+  Phone,
+  Printer,
+} from 'lucide-react'
 import type { Metadata } from 'next'
 import RichText from '@/components/ui/RichText'
 import PrintButton from '@/components/ui/PrintButton'
@@ -88,31 +99,6 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div>
-      {/* ── PRINT HEADER — শুধু print-এ দেখাবে ── */}
-      <div className="hidden print:block p-8 border-b-2 border-gray-900">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">
-              Department of Forensic Medicine & Toxicology
-            </h1>
-            <p className="text-base text-gray-700">Mymensingh Medical College</p>
-            <p className="text-sm text-gray-500">Mymensingh – 2200, Bangladesh</p>
-          </div>
-          <div className="text-right text-sm text-gray-500">
-            <p>Phone: +880 91-XXXXXXX</p>
-            <p>Email: mmc.forensicmedicine@gmail.com</p>
-            <p>
-              Printed:{' '}
-              {new Date().toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              })}
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* ── PAGE HEADER — web only ── */}
       <div
         className={`print:hidden py-12 md:py-16 ${notice.isImportant ? 'bg-red-900' : 'bg-green-900'}`}
@@ -242,7 +228,7 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
 
             {/* Attachments */}
             {notice.attachments && (notice.attachments as any[]).length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-xl p-6 print:border-0 print:p-0 print:mt-6">
+              <div className="bg-white border border-gray-200 rounded-xl p-6 print:hidden">
                 <h2 className="font-display text-xl text-gray-900 mb-4 flex items-center gap-2">
                   <Paperclip className="w-5 h-5 text-green-500 print:hidden" />
                   Attachments
@@ -283,7 +269,7 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
 
             {/* Print Signature */}
             <div className="hidden print:block mt-16">
-              <div className="flex justify-between items-end">
+              <div className="flex justify-end items-end">
                 <div className="text-center">
                   <div className="border-t border-gray-900 w-48 mb-2" />
                   <p className="text-sm font-semibold">Authorized Signature</p>
@@ -291,10 +277,10 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
                   <p className="text-xs text-gray-600">Dept. of Forensic Medicine & Toxicology</p>
                   <p className="text-xs text-gray-600">Mymensingh Medical College</p>
                 </div>
-                <div className="text-center">
+                {/* <div className="text-center">
                   <div className="border-t border-gray-900 w-48 mb-2" />
                   <p className="text-sm font-semibold">Official Seal</p>
-                </div>
+                </div> */}
               </div>
             </div>
 

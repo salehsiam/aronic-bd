@@ -17,7 +17,7 @@ export default async function Marquee() {
   const { notices } = await getData()
 
   return (
-    <div className="bg-green-800 text-yellow-200 text-xs font-medium py-1.5 overflow-hidden whitespace-nowrap">
+    <div className="bg-green-800 text-yellow-200 text-xs font-medium py-1.5 overflow-hidden whitespace-nowrap print:hidden">
       <style>{`
         @keyframes marquee {
           from { transform: translateX(100vw); }

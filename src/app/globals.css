@@ -24,7 +24,10 @@
 
   /* Page setup */
   @page {
-    margin: 20mm;
+    margin-top: 60mm;  /* letterhead-এর জন্য জায়গা */
+    margin-bottom: 20mm;
+    margin-left: 20mm;
+    margin-right: 20mm;
     size: A4;
   }
 
