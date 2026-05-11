@@ -10,6 +10,7 @@ import { Phone } from 'lucide-react'
 const navItems = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Study Materials', href: '/study-materials' },
   { label: 'Faculty', href: '/faculty' },
   { label: 'Notices', href: '/notices' },
   { label: 'Research', href: '/research' },

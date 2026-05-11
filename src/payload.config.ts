@@ -13,6 +13,7 @@ import { Faculty } from './collections/Faculty'
 import { Notices } from './collections/Notices'
 import { Research } from './collections/Research'
 import { Gallery } from './collections/Gallery'
+import { StudyMaterials } from './collections/StudyMaterials'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -67,7 +68,7 @@ export default buildConfig({
       titleSuffix: '— Forensic Medicine MMC',
     },
   },
-  collections: [Users, Media, Faculty, Research, Notices, Gallery],
+  collections: [Users, Media, Faculty, Research, Notices, Gallery, StudyMaterials],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

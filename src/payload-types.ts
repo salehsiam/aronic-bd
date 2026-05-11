@@ -73,6 +73,7 @@ export interface Config {
     research: Research;
     notices: Notice;
     gallery: Gallery;
+    'study-materials': StudyMaterial;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +87,7 @@ export interface Config {
     research: ResearchSelect<false> | ResearchSelect<true>;
     notices: NoticesSelect<false> | NoticesSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
+    'study-materials': StudyMaterialsSelect<false> | StudyMaterialsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -329,6 +331,27 @@ export interface Gallery {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-materials".
+ */
+export interface StudyMaterial {
+  id: string;
+  title: string;
+  subject: 'forensic-medicine' | 'toxicology' | 'medical-jurisprudence' | 'forensic-pathology';
+  year?: ('1st-year' | '2nd-year' | '3rd-year' | '4th-year' | 'final-year' | 'all-years') | null;
+  type: 'lecture-note' | 'question-bank' | 'case-study' | 'guideline' | 'reference' | 'presentation';
+  file: string | Media;
+  description?: string | null;
+  uploadedBy?: (string | null) | Faculty;
+  downloadCount?: number | null;
+  /**
+   * Uncheck করলে শুধু logged-in users দেখতে পারবে
+   */
+  isPublic?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -374,6 +397,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'gallery';
         value: string | Gallery;
+      } | null)
+    | ({
+        relationTo: 'study-materials';
+        value: string | StudyMaterial;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -560,6 +587,23 @@ export interface GallerySelect<T extends boolean = true> {
       };
   date?: T;
   isPublished?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-materials_select".
+ */
+export interface StudyMaterialsSelect<T extends boolean = true> {
+  title?: T;
+  subject?: T;
+  year?: T;
+  type?: T;
+  file?: T;
+  description?: T;
+  uploadedBy?: T;
+  downloadCount?: T;
+  isPublic?: T;
   updatedAt?: T;
   createdAt?: T;
 }
