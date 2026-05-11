@@ -9,10 +9,7 @@ import {
   ArrowLeft,
   Tag,
   ChevronRight,
-  MapPin,
-  Mail,
-  Phone,
-  Printer,
+  Download,
 } from 'lucide-react'
 import type { Metadata } from 'next'
 import RichText from '@/components/ui/RichText'
@@ -228,41 +225,105 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
 
             {/* Attachments */}
             {notice.attachments && (notice.attachments as any[]).length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-xl p-6 print:hidden">
+              <div className="bg-white border border-gray-200 rounded-xl p-6 print:border-0 print:p-0 print:mt-6">
                 <h2 className="font-display text-xl text-gray-900 mb-4 flex items-center gap-2">
                   <Paperclip className="w-5 h-5 text-green-500 print:hidden" />
                   Attachments
                 </h2>
                 <div className="space-y-3">
-                  {(notice.attachments as any[]).map((attachment: any, i: number) => (
-                    <div key={i}>
-                      {/* Web view */}
-                      <a
-                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(attachment.file?.url || '')}&embedded=false`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="print:hidden flex items-center gap-3 p-3 md:p-4 bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-200 rounded-xl transition-all group"
-                      >
-                        <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <span className="text-2xl">📄</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold text-gray-900 truncate">
-                            {attachment.label || `Attachment ${i + 1}`}
+                  {(notice.attachments as any[]).map((attachment: any, i: number) => {
+                    const fileUrl = attachment.file?.cloudinaryUrl || attachment.file?.url || ''
+                    const mimeType = attachment.file?.mimeType || ''
+                    const isImage = mimeType.startsWith('image/')
+                    const isPDF = mimeType === 'application/pdf'
+
+                    return (
+                      <div key={i}>
+                        {/* Image Preview */}
+                        {isImage && (
+                          <div className="print:hidden rounded-xl overflow-hidden border border-gray-200">
+                            <img
+                              src={fileUrl}
+                              alt={attachment.label || `Attachment ${i + 1}`}
+                              className="w-full max-h-96 object-contain bg-gray-50"
+                            />
+                            {attachment.label && (
+                              <div className="p-3 bg-gray-50 border-t border-gray-200">
+                                <p className="text-xs text-gray-500 font-medium">
+                                  {attachment.label || `Attachment ${i + 1}`}
+                                </p>
+                              </div>
+                            )}
+                            <div className="p-3 bg-gray-50 border-t border-gray-100">
+                              <a
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-xs text-green-600 font-bold hover:underline"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                Download Image
+                              </a>
+                            </div>
                           </div>
-                          <div className="text-xs text-gray-400 mt-0.5">Click to view PDF</div>
+                        )}
+
+                        {/* PDF View */}
+                        {isPDF && (
+                          <a
+                            href={`https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=false`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="print:hidden flex items-center gap-3 p-3 md:p-4 bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-200 rounded-xl transition-all group"
+                          >
+                            <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <span className="text-2xl">📄</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-gray-900 truncate">
+                                {attachment.label || `Attachment ${i + 1}`}
+                              </div>
+                              <div className="text-xs text-gray-400 mt-0.5">Click to view PDF</div>
+                            </div>
+                            <div className="flex-shrink-0 flex items-center gap-1 text-green-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                              View <ChevronRight className="w-4 h-4" />
+                            </div>
+                          </a>
+                        )}
+
+                        {/* Other file types */}
+                        {!isImage && !isPDF && (
+                          <a
+                            href={fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="print:hidden flex items-center gap-3 p-3 md:p-4 bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-200 rounded-xl transition-all group"
+                          >
+                            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <span className="text-2xl">📎</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-gray-900 truncate">
+                                {attachment.label || `Attachment ${i + 1}`}
+                              </div>
+                              <div className="text-xs text-gray-400 mt-0.5">Click to download</div>
+                            </div>
+                            <div className="flex-shrink-0 flex items-center gap-1 text-green-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                              Download <ChevronRight className="w-4 h-4" />
+                            </div>
+                          </a>
+                        )}
+
+                        {/* Print view */}
+                        <div className="hidden print:flex items-center gap-2 py-2 border-b border-gray-200">
+                          <span>{isImage ? '🖼️' : '📄'}</span>
+                          <span className="text-sm">
+                            {attachment.label || `Attachment ${i + 1}`}
+                          </span>
                         </div>
-                        <div className="flex-shrink-0 flex items-center gap-1 text-green-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                          View <ChevronRight className="w-4 h-4" />
-                        </div>
-                      </a>
-                      {/* Print view */}
-                      <div className="hidden print:flex items-center gap-2 py-2 border-b border-gray-200">
-                        <span>📄</span>
-                        <span className="text-sm">{attachment.label || `Attachment ${i + 1}`}</span>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )}
