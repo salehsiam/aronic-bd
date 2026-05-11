@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import RichText from '@/components/ui/RichText'
+import Image from 'next/image'
+import avatar from './../../../../../public/avatar.jpg'
 export const revalidate = 0
 
 async function getFacultyMember(slug: string) {
@@ -98,7 +100,7 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
                   className="w-full h-full object-cover"
                 />
               ) : (
-                ''
+                <Image src={avatar} width={300} height={300} alt={member.name} />
               )}
             </div>
 

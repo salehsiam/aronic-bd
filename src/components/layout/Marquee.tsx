@@ -1,5 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+export const revalidate = 0
 
 async function getData() {
   const payload = await getPayload({ config })

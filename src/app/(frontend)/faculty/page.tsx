@@ -3,6 +3,8 @@ import config from '@payload-config'
 import Link from 'next/link'
 import { User, Mail, Phone, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
+import Image from 'next/image'
+import avatar from './../../../../public/avatar.jpg'
 export const revalidate = 0
 export const metadata: Metadata = {
   title: 'Faculty Members',
@@ -86,7 +88,7 @@ export default async function FacultyPage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <User className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                <Image src={avatar} width={40} height={40} alt={hod.name} />
               )}
             </div>
 
@@ -169,7 +171,7 @@ export default async function FacultyPage() {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <User className="w-10 h-10 text-white" />
+                            <Image src={avatar} width={300} height={300} alt={member.name} />
                           </div>
                         )}
                       </div>
