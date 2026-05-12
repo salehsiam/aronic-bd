@@ -11,6 +11,7 @@ import {
   Bell,
   Users,
   ExternalLink,
+  Download,
 } from 'lucide-react'
 import Image from 'next/image'
 import avatar from './../../../public/avatar.jpg'
@@ -41,7 +42,7 @@ const noticeConfig = {
 
 async function getData() {
   const payload = await getPayload({ config })
-  const [facultyRes, noticesRes, researchRes] = await Promise.all([
+  const [facultyRes, noticesRes, researchRes, studyRes] = await Promise.all([
     payload.find({
       collection: 'faculty',
       where: { isCurrent: { equals: true } },
@@ -60,12 +61,23 @@ async function getData() {
       sort: '-publishYear',
       limit: 3,
     }),
+    payload.find({
+      collection: 'study-materials',
+      where: { isPublic: { equals: true } },
+      sort: '-createdAt',
+      limit: 4,
+    }),
   ])
-  return { faculty: facultyRes.docs, notices: noticesRes.docs, research: researchRes.docs }
+  return {
+    faculty: facultyRes.docs,
+    notices: noticesRes.docs,
+    research: researchRes.docs,
+    studyMaterials: studyRes.docs,
+  }
 }
 
 export default async function HomePage() {
-  const { faculty, notices, research } = await getData()
+  const { faculty, notices, research, studyMaterials } = await getData()
 
   return (
     <div>
@@ -403,6 +415,87 @@ export default async function HomePage() {
               <div className="text-center py-10 text-gray-400">
                 <div className="text-4xl mb-3">🔬</div>
                 <p>No research data yet.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── STUDY MATERIALS ── */}
+      <section className="py-12 md:py-16">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <div className="flex justify-between items-end mb-7">
+            <div>
+              <div className="flex items-center gap-2 text-green-500 text-xs font-bold tracking-widest uppercase mb-2">
+                <span className="w-6 h-0.5 bg-green-400 inline-block" />
+                Resources
+              </div>
+              <h2 className="font-display text-2xl md:text-3xl text-gray-900">Study Materials</h2>
+            </div>
+            <Link
+              href="/study-materials"
+              className="text-green-600 font-semibold text-sm flex items-center gap-1"
+            >
+              View All <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {studyMaterials.length > 0 ? (
+              studyMaterials.map((item: any) => {
+                const typeColors: Record<string, string> = {
+                  'lecture-note': 'bg-blue-100 text-blue-700',
+                  'question-bank': 'bg-yellow-100 text-yellow-700',
+                  'case-study': 'bg-purple-100 text-purple-700',
+                  guideline: 'bg-green-100 text-green-700',
+                  reference: 'bg-red-100 text-red-700',
+                  presentation: 'bg-orange-100 text-orange-700',
+                }
+                const typeColor = typeColors[item.type] || 'bg-gray-100 text-gray-700'
+
+                return (
+                  <div
+                    key={item.id}
+                    className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all flex flex-col"
+                  >
+                    {/* Type Badge */}
+                    <span
+                      className={`inline-flex items-center text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 self-start ${typeColor}`}
+                    >
+                      {item.type?.replace(/-/g, ' ')}
+                    </span>
+
+                    {/* Title */}
+                    <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-2 flex-1 line-clamp-2">
+                      {item.title}
+                    </h3>
+
+                    {/* Year */}
+                    {item.year && (
+                      <div className="text-xs text-gray-400 mb-3">
+                        {item.year.replace(/-/g, ' ')}
+                      </div>
+                    )}
+
+                    {/* View Button */}
+                    {item.file?.url && (
+                      <a
+                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file.cloudinaryUrl || item.file.url)}&embedded=false`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 w-full bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-2 rounded-lg transition-all mt-auto"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        View / Download
+                      </a>
+                    )}
+                  </div>
+                )
+              })
+            ) : (
+              <div className="col-span-4 text-center py-10 text-gray-400">
+                <div className="text-4xl mb-3">📚</div>
+                <p>No study materials yet.</p>
               </div>
             )}
           </div>
