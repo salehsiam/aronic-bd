@@ -29,6 +29,7 @@ export const Faculty: CollectionConfig = {
         { label: 'Associate Professor', value: 'associate-professor' },
         { label: 'Assistant Professor', value: 'assistant-professor' },
         { label: 'Lecturer', value: 'lecturer' },
+        { label: 'Medical Officer', value: 'medical-officer' },
       ],
     },
     {
