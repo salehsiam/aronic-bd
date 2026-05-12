@@ -41,6 +41,7 @@ const designationLabel: Record<string, string> = {
   'associate-professor': 'Associate Professor',
   'assistant-professor': 'Assistant Professor',
   lecturer: 'Lecturer',
+  'medical-officer': 'Medical Officer',
 }
 
 export default async function FacultyPage() {

@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import RichText from '@/components/ui/RichText'
 import Image from 'next/image'
 import avatar from './../../../../../public/avatar.jpg'
+import { ExternalLink, FileText } from 'lucide-react'
 export const revalidate = 0
 
 async function getFacultyMember(slug: string) {
@@ -190,27 +191,104 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
               <div className="bg-white border border-gray-200 rounded-xl p-6">
                 <h2 className="font-display text-xl text-gray-900 mb-5">Publications</h2>
                 <div className="flex flex-col gap-4">
-                  {research.map((item: any) => (
-                    <div
-                      key={item.id}
-                      className="flex gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0"
-                    >
-                      <div className="font-display text-2xl text-green-200 flex-shrink-0 w-12 leading-none mt-0.5">
-                        {item.publishYear}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm leading-snug">
-                          {item.title}
+                  {research.length > 0 ? (
+                    research.map((item: any) => (
+                      <div
+                        key={item.id}
+                        className="bg-white border border-gray-200 rounded-xl p-4 md:p-6 hover:shadow-md transition-all group"
+                      >
+                        <div className="flex gap-4 md:gap-6">
+                          {/* Year */}
+                          <div className="font-display text-3xl md:text-4xl text-green-200 flex-shrink-0 w-12 md:w-16 leading-none mt-1">
+                            {item.publishYear}
+                          </div>
+
+                          {/* Content */}
+                          <div className="flex-1 min-w-0">
+                            {/* Category Badge */}
+                            <div className="flex flex-wrap items-center gap-2 mb-2">
+                              <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-100 px-2.5 py-1 rounded-full">
+                                📖 {item.category?.replace(/-/g, ' ')}
+                              </span>
+                              {item.isFeatured && (
+                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-yellow-700 bg-yellow-100 px-2.5 py-1 rounded-full">
+                                  ⭐ Featured
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Title */}
+                            <div className="font-semibold text-gray-900 text-sm md:text-base leading-snug mb-1.5">
+                              {item.title}
+                            </div>
+
+                            {/* Authors */}
+                            {item.facultyAuthors?.length > 0 && (
+                              <div className="text-green-600 text-xs font-medium mb-1">
+                                {item.facultyAuthors.map((a: any) => a.name || a).join(', ')}
+                              </div>
+                            )}
+                            {item.authors?.length > 0 && (
+                              <div className="text-gray-500 text-xs mb-1">
+                                {item.authors.map((a: any) => a.authorName).join(', ')}
+                              </div>
+                            )}
+
+                            {/* Journal */}
+                            {item.journal && (
+                              <div className="text-gray-400 text-xs italic mb-3">
+                                {item.journal}
+                                {item.volume ? ` · ${item.volume}` : ''}
+                                {item.pages ? ` · pp. ${item.pages}` : ''}
+                              </div>
+                            )}
+
+                            {/* Links */}
+                            <div className="flex flex-wrap items-center gap-3">
+                              {item.doi && (
+                                <a
+                                  href={item.doi}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition-all"
+                                >
+                                  <ExternalLink className="w-3 h-3" />
+                                  DOI
+                                </a>
+                              )}
+                              {item.externalLink && (
+                                <a
+                                  href={item.externalLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-2.5 py-1 rounded-lg transition-all"
+                                >
+                                  <ExternalLink className="w-3 h-3" />
+                                  View Online
+                                </a>
+                              )}
+                              {item.file?.url && (
+                                <a
+                                  href={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file.cloudinaryUrl || item.file.url)}&embedded=false`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-lg transition-all"
+                                >
+                                  <FileText className="w-3 h-3" />
+                                  PDF
+                                </a>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        {item.journal && (
-                          <div className="text-gray-400 text-xs mt-1 italic">{item.journal}</div>
-                        )}
-                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full mt-2">
-                          📖 {item.category?.replace(/-/g, ' ')}
-                        </span>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-10 text-gray-400">
+                      <div className="text-4xl mb-3">🔬</div>
+                      <p>No research data yet.</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             )}

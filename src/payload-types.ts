@@ -183,7 +183,13 @@ export interface Faculty {
   id: string;
   name: string;
   nameBn?: string | null;
-  designation: 'professor-head' | 'professor' | 'associate-professor' | 'assistant-professor' | 'lecturer';
+  designation:
+    | 'professor-head'
+    | 'professor'
+    | 'associate-professor'
+    | 'assistant-professor'
+    | 'lecturer'
+    | 'medical-officer';
   photo?: (string | null) | Media;
   email?: string | null;
   phone?: string | null;

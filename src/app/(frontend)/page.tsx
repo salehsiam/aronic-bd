@@ -1,7 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
-import { Bell, Users } from 'lucide-react'
 import {
   FileText,
   AlertTriangle,
@@ -9,6 +8,9 @@ import {
   ClipboardList,
   CalendarDays,
   ArrowRight,
+  Bell,
+  Users,
+  ExternalLink,
 } from 'lucide-react'
 import Image from 'next/image'
 import avatar from './../../../public/avatar.jpg'
@@ -303,34 +305,104 @@ export default async function HomePage() {
               View All <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
+
           <div className="flex flex-col gap-4">
             {research.length > 0 ? (
               research.map((item: any) => (
                 <div
                   key={item.id}
-                  className="bg-white border border-gray-200 rounded-xl p-4 md:p-6 flex gap-8 md:gap-10 hover:shadow-md transition-all"
+                  className="bg-white border border-gray-200 rounded-xl p-4 md:p-6 hover:shadow-md transition-all group"
                 >
-                  <div className="font-display text-3xl md:text-4xl text-green-200 flex-shrink-0 w-12 md:w-14 leading-none mt-1">
-                    {item.publishYear}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 text-sm md:text-base leading-snug">
-                      {item.title}
+                  <div className="flex gap-4 md:gap-6">
+                    {/* Year */}
+                    <div className="font-display text-3xl md:text-4xl text-green-200 flex-shrink-0 w-12 md:w-16 leading-none mt-1">
+                      {item.publishYear}
                     </div>
-                    {item.journal && (
-                      <div className="text-gray-400 text-xs md:text-sm mt-1 italic">
-                        {item.journal}
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      {/* Category Badge */}
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-100 px-2.5 py-1 rounded-full">
+                          📖 {item.category?.replace(/-/g, ' ')}
+                        </span>
+                        {item.isFeatured && (
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-yellow-700 bg-yellow-100 px-2.5 py-1 rounded-full">
+                            ⭐ Featured
+                          </span>
+                        )}
                       </div>
-                    )}
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full mt-2">
-                      📖 {item.category?.replace(/-/g, ' ')}
-                    </span>
+
+                      {/* Title */}
+                      <div className="font-semibold text-gray-900 text-sm md:text-base leading-snug mb-1.5">
+                        {item.title}
+                      </div>
+
+                      {/* Authors */}
+                      {item.facultyAuthors?.length > 0 && (
+                        <div className="text-green-600 text-xs font-medium mb-1">
+                          {item.facultyAuthors.map((a: any) => a.name || a).join(', ')}
+                        </div>
+                      )}
+                      {item.authors?.length > 0 && (
+                        <div className="text-gray-500 text-xs mb-1">
+                          {item.authors.map((a: any) => a.authorName).join(', ')}
+                        </div>
+                      )}
+
+                      {/* Journal */}
+                      {item.journal && (
+                        <div className="text-gray-400 text-xs italic mb-3">
+                          {item.journal}
+                          {item.volume ? ` · ${item.volume}` : ''}
+                          {item.pages ? ` · pp. ${item.pages}` : ''}
+                        </div>
+                      )}
+
+                      {/* Links */}
+                      <div className="flex flex-wrap items-center gap-3">
+                        {item.doi && (
+                          <a
+                            href={item.doi}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition-all"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            DOI
+                          </a>
+                        )}
+                        {item.externalLink && (
+                          <a
+                            href={item.externalLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-2.5 py-1 rounded-lg transition-all"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            View Online
+                          </a>
+                        )}
+                        {item.file?.url && (
+                          <a
+                            href={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file.cloudinaryUrl || item.file.url)}&embedded=false`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-lg transition-all"
+                          >
+                            <FileText className="w-3 h-3" />
+                            PDF
+                          </a>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))
             ) : (
               <div className="text-center py-10 text-gray-400">
-                No research data yet. Add from admin panel with isFeatured
+                <div className="text-4xl mb-3">🔬</div>
+                <p>No research data yet.</p>
               </div>
             )}
           </div>
