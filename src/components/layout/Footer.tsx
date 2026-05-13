@@ -52,7 +52,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5 text-sm text-white/60">
                 <Clock className="w-4 h-4 text-green-400 flex-shrink-0" />
-                <span>Sat – Thu: 8:00 AM – 2:30 PM</span>
+                <span>Sat – Thu: 8:00 AM – 4:30 PM</span>
               </div>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function Footer() {
                 <Clock className="w-3.5 h-3.5 text-green-400" />
                 <span>Saturday – Thursday</span>
               </div>
-              <p className="pl-5">8:00 AM – 2:30 PM</p>
+              <p className="pl-5">8:00 AM – 4:30 PM</p>
               <p className="pl-5 text-red-400/70">Friday: Closed</p>
             </div>
           </div>

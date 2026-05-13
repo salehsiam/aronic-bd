@@ -66,12 +66,12 @@ export default function ContactPage() {
                   {
                     icon: <Mail className="w-4 h-4" />,
                     label: 'Email',
-                    value: 'forensic@mmc.edu.bd',
+                    value: 'mmc.forensicmedicine@gmail.com',
                   },
                   {
                     icon: <Clock className="w-4 h-4" />,
                     label: 'Office Hours',
-                    value: 'Saturday – Thursday\n8:00 AM – 2:30 PM\nFriday: Closed',
+                    value: 'Saturday – Thursday\n8:00 AM – 4:30 PM\nFriday: Closed',
                   },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-3">
@@ -98,7 +98,7 @@ export default function ContactPage() {
                   From <strong>Mymensingh Bus Stand</strong> — 10 min by rickshaw
                 </p>
                 <p>
-                  From <strong>MMC Main Gate</strong> — Building C, Ground Floor
+                  From <strong>MMC Main Gate</strong> — College Building, 4th Floor
                 </p>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function ContactPage() {
                 <p className="text-gray-400 text-xs">Mymensingh – 2200, Bangladesh</p>
 
                 <a
-                  href="https://maps.google.com/?q=Mymensingh+Medical+College"
+                  href="https://www.google.com/maps/place/%E0%A6%B2%E0%A6%BE%E0%A6%B6%E0%A6%95%E0%A6%BE%E0%A6%9F%E0%A6%BE+%E0%A6%98%E0%A6%B0,%E0%A6%AE%E0%A7%9F%E0%A6%AE%E0%A6%A8%E0%A6%B8%E0%A6%BF%E0%A6%82%E0%A6%B9+%E0%A6%AE%E0%A7%87%E0%A6%A1%E0%A6%BF%E0%A6%95%E0%A7%87%E0%A6%B2+%E0%A6%95%E0%A6%B2%E0%A7%87%E0%A6%9C/@24.7412786,90.4080267,167m/data=!3m1!1e3!4m14!1m7!3m6!1s0x37564f0bb84cc539:0xa3d1b21cb813ffd4!2sMymensingh+Medical+College!8m2!3d24.7459181!4d90.4179318!16zL20vMGJ2YzVo!3m5!1s0x37564f00084350e9:0xe633636adb6a383e!8m2!3d24.7414744!4d90.4081739!16s%2Fg%2F11n4dmhg2l?entry=ttu&g_ep=EgoyMDI2MDUxMC4wIKXMDSoASAFQAw%3D%3D"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-green-600 hover:bg-green-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-1"

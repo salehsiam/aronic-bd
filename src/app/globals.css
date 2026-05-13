@@ -3,6 +3,9 @@
 
 @layer base {
   /* html { scroll-behavior: smooth; } */
+  [data-scroll-behavior="smooth"] {
+  scroll-behavior: smooth;
+}
   /* body { font-family: 'DM Sans', sans-serif; color: #111a14; overflow-x: hidden; }
   h1, h2, h3, h4 { font-family: 'DM Serif Display', Georgia, serif; } */
 }

@@ -131,7 +131,7 @@ export default async function AboutPage() {
               <div className="space-y-6">
                 {[
                   {
-                    year: '1924',
+                    year: '1962',
                     title: 'MMC Established',
                     desc: 'Mymensingh Medical College was established, laying the foundation for medical education in the region.',
                   },
@@ -141,7 +141,7 @@ export default async function AboutPage() {
                     desc: 'The Department of Forensic Medicine was formally established to meet the growing need for medico-legal expertise.',
                   },
                   {
-                    year: '1980s',
+                    year: '1962s',
                     title: 'Toxicology Added',
                     desc: 'Toxicology was incorporated into the department curriculum, expanding the scope of forensic education.',
                   },
