@@ -5,7 +5,7 @@ import { User, Mail, Phone, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import avatar from './../../../../public/avatar.jpg'
-export const revalidate = 0
+export const revalidate = 300
 export const metadata: Metadata = {
   title: 'Faculty Members',
   description:
@@ -88,6 +88,8 @@ export default async function FacultyPage() {
                   src={(hod.photo as any).cloudinaryUrl || (hod.photo as any).url || ''}
                   alt={hod.name}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-5xl">
@@ -172,10 +174,19 @@ export default async function FacultyPage() {
                             }
                             alt={member.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            decoding="async"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Image src={avatar} width={300} height={300} alt={member.name} />
+                            <Image
+                              src={avatar}
+                              width={300}
+                              height={300}
+                              alt={member.name}
+                              loading="lazy"
+                              decoding="async"
+                            />
                           </div>
                         )}
                       </div>

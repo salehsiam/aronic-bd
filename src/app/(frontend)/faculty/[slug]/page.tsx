@@ -7,7 +7,7 @@ import RichText from '@/components/ui/RichText'
 import Image from 'next/image'
 import avatar from './../../../../../public/avatar.jpg'
 import { ExternalLink, FileText } from 'lucide-react'
-export const revalidate = 0
+export const revalidate = 300
 
 async function getFacultyMember(slug: string) {
   const payload = await getPayload({ config })
@@ -99,6 +99,8 @@ export default async function FacultyDetailPage({ params }: { params: Promise<{ 
                   src={(member.photo as any).url}
                   alt={member.name}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <Image src={avatar} width={300} height={300} alt={member.name} />

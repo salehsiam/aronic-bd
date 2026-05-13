@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import avatar from './../../../public/avatar.jpg'
-export const revalidate = 0
+export const revalidate = 300
 
 const noticeConfig = {
   exam: {
@@ -263,10 +263,19 @@ export default async function HomePage() {
                         src={member.photo.cloudinaryUrl || member.photo.url || ''}
                         alt={member.photo.alt || member.name}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-5xl">
-                        <Image src={avatar} width={300} height={300} alt={member.name} />
+                        <Image
+                          src={avatar}
+                          width={300}
+                          height={300}
+                          alt={member.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </div>
                     )}
                     {member.designation === 'professor-head' && (

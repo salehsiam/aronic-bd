@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import type { Metadata } from 'next'
 
-export const revalidate = 0
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Study Materials',
@@ -181,7 +181,7 @@ export default async function StudyMaterialsPage() {
                         {/* Uploaded By */}
                         {item.uploadedBy && (
                           <p className="text-xs text-gray-400 mb-3 flex items-center gap-1">
-                            👨‍⚕️ {item.uploadedBy.name}
+                            {item.uploadedBy.name}
                           </p>
                         )}
 

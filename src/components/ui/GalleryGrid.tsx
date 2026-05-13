@@ -39,6 +39,8 @@ export default function GalleryGrid({
                 src={item.image.url || ''}
                 alt={item.image.alt || item.caption || albumTitle}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-4xl bg-green-100">
@@ -91,6 +93,8 @@ export default function GalleryGrid({
                 src={images[lightbox].image.url}
                 alt={images[lightbox].image.alt || albumTitle}
                 className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                loading="lazy"
+                decoding="async"
               />
             ) : null}
             {images[lightbox]?.caption && (

@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         green: {
-          50:  '#f3faf6',
+          50: '#f3faf6',
           100: '#e8f7ef',
           200: '#a3ddb8',
           300: '#4dc983',
@@ -23,13 +23,13 @@ const config: Config = {
         },
         gold: {
           DEFAULT: '#c9a84c',
-          light:   '#f0d98a',
+          light: '#f0d98a',
         },
       },
       fontFamily: {
-        display: ['DM Serif Display', 'Georgia', 'serif'],
-        sans:    ['DM Sans', 'sans-serif'],
-        bn:      ['Hind Siliguri', 'sans-serif'],
+        display: ['var(--font-dm-serif)', 'Georgia', 'serif'],
+        sans: ['var(--font-dm-sans)', 'sans-serif'],
+        bn: ['var(--font-hind)', 'sans-serif'],
       },
     },
   },

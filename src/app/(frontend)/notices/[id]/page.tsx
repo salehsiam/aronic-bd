@@ -15,8 +15,7 @@ import type { Metadata } from 'next'
 import RichText from '@/components/ui/RichText'
 import PrintButton from '@/components/ui/PrintButton'
 
-export const revalidate = 0
-
+export const revalidate = 300
 async function getNotice(id: string) {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({
@@ -246,6 +245,8 @@ export default async function NoticeDetailPage({ params }: { params: Promise<{ i
                               src={fileUrl}
                               alt={attachment.label || `Attachment ${i + 1}`}
                               className="w-full max-h-96 object-contain bg-gray-50"
+                              loading="lazy"
+                              decoding="async"
                             />
                             {attachment.label && (
                               <div className="p-3 bg-gray-50 border-t border-gray-200">

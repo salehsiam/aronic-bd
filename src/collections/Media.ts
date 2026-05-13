@@ -29,7 +29,13 @@ export const Media: CollectionConfig = {
     afterRead: [
       ({ doc }) => {
         if (doc?.cloudinaryUrl) {
-          doc.url = doc.cloudinaryUrl // শুধু এটুকু রাখো
+          const isPDF = doc.cloudinaryUrl.includes('/raw/upload/')
+          if (isPDF) {
+            doc.url = doc.cloudinaryUrl
+          } else {
+            // Image optimization — auto format, quality
+            doc.url = doc.cloudinaryUrl.replace('/upload/', '/upload/f_auto,q_auto/')
+          }
         }
         return doc
       },
