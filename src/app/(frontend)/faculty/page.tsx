@@ -33,6 +33,7 @@ const designationOrder = [
   'associate-professor',
   'assistant-professor',
   'lecturer',
+  'medical-officer',
 ]
 
 const designationLabel: Record<string, string> = {
@@ -89,7 +90,9 @@ export default async function FacultyPage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Image src={avatar} width={40} height={40} alt={hod.name} />
+                <div className="w-full h-full flex items-center justify-center text-5xl">
+                  <Image src={avatar} width={40} height={40} alt={hod.name} />
+                </div>
               )}
             </div>
 
@@ -159,7 +162,7 @@ export default async function FacultyPage() {
                       href={`/faculty/${member.slug || member.id}`}
                       className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all group"
                     >
-                      <div className="h-40 md:h-60 relative bg-gradient-to-br from-green-800 to-green-600 overflow-hidden">
+                      <div className="h-36 md:h-60 relative bg-gradient-to-br from-green-800 to-green-600 overflow-hidden">
                         {member.photo?.url ? (
                           <img
                             src={
