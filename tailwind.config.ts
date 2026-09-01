@@ -7,32 +7,21 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {
-      colors: {
-        green: {
-          50: '#f3faf6',
-          100: '#e8f7ef',
-          200: '#a3ddb8',
-          300: '#4dc983',
-          400: '#28a865',
-          500: '#1f8050',
-          600: '#1a6b42',
-          700: '#155736',
-          800: '#0f4029',
-          900: '#0a2e1a',
-        },
-        gold: {
-          DEFAULT: '#c9a84c',
-          light: '#f0d98a',
-        },
-      },
-      fontFamily: {
-        display: ['var(--font-dm-serif)', 'Georgia', 'serif'],
-        sans: ['var(--font-dm-sans)', 'sans-serif'],
-        bn: ['var(--font-hind)', 'sans-serif'],
-      },
+  extend: {
+    colors: {
+      cotton: '#F7F4EC',
+      ink: '#1C1B19',
+      indigo: '#2A3B63',
+      rust: '#9C5233',
+      line: '#D9D3C4',
+    },
+    fontFamily: {
+      display: ['var(--font-display)', 'serif'],
+      body: ['var(--font-body)', 'sans-serif'],
+      mono: ['var(--font-mono)', 'monospace'],
     },
   },
+},
   plugins: [],
 }
 

@@ -64,17 +64,18 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    customers: CustomerAuthOperations;
   };
   blocks: {};
   collections: {
     users: User;
+    customers: Customer;
     media: Media;
-    faculty: Faculty;
-    research: Research;
-    notices: Notice;
+    products: Product;
+    categories: Category;
+    orders: Order;
     gallery: Gallery;
-    'study-materials': StudyMaterial;
-    'contact-messages': ContactMessage;
+    'hero-slides': HeroSlide;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -83,13 +84,13 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    faculty: FacultySelect<false> | FacultySelect<true>;
-    research: ResearchSelect<false> | ResearchSelect<true>;
-    notices: NoticesSelect<false> | NoticesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
-    'study-materials': StudyMaterialsSelect<false> | StudyMaterialsSelect<true>;
-    'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
+    'hero-slides': HeroSlidesSelect<false> | HeroSlidesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -105,13 +106,31 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | Customer;
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface CustomerAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -158,6 +177,33 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers".
+ */
+export interface Customer {
+  id: string;
+  name: string;
+  phone: string;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'customers';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
@@ -179,30 +225,16 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faculty".
+ * via the `definition` "products".
  */
-export interface Faculty {
+export interface Product {
   id: string;
   name: string;
-  nameBn?: string | null;
-  designation:
-    | 'professor-head'
-    | 'professor'
-    | 'associate-professor'
-    | 'assistant-professor'
-    | 'lecturer'
-    | 'medical-officer';
-  photo?: (string | null) | Media;
-  email?: string | null;
-  phone?: string | null;
-  qualifications?:
-    | {
-        degree: string;
-        id?: string | null;
-      }[]
-    | null;
-  specialization?: string | null;
-  bio?: {
+  /**
+   * URL-friendly name, jemon: mens-cotton-shirt
+   */
+  slug: string;
+  description?: {
     root: {
       type: string;
       children: {
@@ -217,103 +249,82 @@ export interface Faculty {
     };
     [k: string]: unknown;
   } | null;
-  bioBn?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  researchInterests?:
+  category: string | Category;
+  price: number;
+  /**
+   * Discount price thakle bosao, na thakle khali rakho
+   */
+  salePrice?: number | null;
+  images: (string | Media)[];
+  sizes?:
     | {
-        interest: string;
+        size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
+        stock: number;
         id?: string | null;
       }[]
     | null;
-  publications?: number | null;
-  joinDate?: string | null;
-  /**
-   * Lower number = দেখাবে আগে
-   */
-  order?: number | null;
-  isCurrent?: boolean | null;
-  /**
-   * Auto-fill করো: example → dr-rahman
-   */
-  slug?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "research".
- */
-export interface Research {
-  id: string;
-  title: string;
-  authors?:
+  colors?:
     | {
-        authorName: string;
+        colorName: string;
+        /**
+         * Hex code, jemon #FF0000
+         */
+        colorCode?: string | null;
         id?: string | null;
       }[]
     | null;
-  facultyAuthors?: (string | Faculty)[] | null;
-  journal?: string | null;
-  publishYear: number;
-  volume?: string | null;
-  pages?: string | null;
-  doi?: string | null;
-  abstract?: string | null;
-  category: 'journal-article' | 'conference-paper' | 'book-chapter' | 'thesis';
-  file?: (string | null) | Media;
-  externalLink?: string | null;
+  /**
+   * Product code, jemon ARN-001
+   */
+  sku?: string | null;
   isFeatured?: boolean | null;
+  /**
+   * Off korle product shop e dekhabe na
+   */
+  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "notices".
+ * via the `definition` "categories".
  */
-export interface Notice {
+export interface Category {
   id: string;
-  title: string;
-  titleBn?: string | null;
-  category: 'academic' | 'exam' | 'administrative' | 'emergency' | 'general';
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  attachments?:
-    | {
-        file?: (string | null) | Media;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  publishDate: string;
-  expiryDate?: string | null;
-  isImportant?: boolean | null;
-  isPublished?: boolean | null;
+  name: string;
+  slug: string;
+  image?: (string | null) | Media;
+  /**
+   * Subcategory hole parent category select koro (optional)
+   */
+  parent?: (string | null) | Category;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  orderNumber: string;
+  customer?: (string | null) | Customer;
+  customerName: string;
+  customerPhone: string;
+  customerEmail?: string | null;
+  shippingAddress: string;
+  items: {
+    product: string | Product;
+    size?: string | null;
+    color?: string | null;
+    quantity: number;
+    priceAtPurchase: number;
+    id?: string | null;
+  }[];
+  total: number;
+  paymentMethod: 'sslcommerz' | 'cod';
+  paymentStatus?: ('pending' | 'paid' | 'failed') | null;
+  status?: ('pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -339,38 +350,33 @@ export interface Gallery {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "study-materials".
+ * via the `definition` "hero-slides".
  */
-export interface StudyMaterial {
+export interface HeroSlide {
   id: string;
-  title: string;
-  subject: 'forensic-medicine' | 'toxicology' | 'medical-jurisprudence' | 'forensic-pathology';
-  year?: ('1st-year' | '2nd-year' | '3rd-year' | '4th-year' | 'final-year' | 'all-years') | null;
-  type: 'lecture-note' | 'question-bank' | 'case-study' | 'guideline' | 'reference' | 'presentation';
-  file: string | Media;
-  description?: string | null;
-  uploadedBy?: (string | null) | Faculty;
-  downloadCount?: number | null;
   /**
-   * Uncheck করলে শুধু logged-in users দেখতে পারবে
+   * Ekhane Enter chepe notun line daw
    */
-  isPublic?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-messages".
- */
-export interface ContactMessage {
-  id: string;
-  name: string;
-  email?: string | null;
-  phone?: string | null;
-  subject?: string | null;
-  message: string;
-  status?: ('unread' | 'read' | 'replied') | null;
-  adminNote?: string | null;
+  headline: string;
+  /**
+   * Choto label, headline er upore (jemon: "Easy Special")
+   */
+  eyebrow?: string | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  /**
+   * Wide/landscape image — desktop e dekhabe (recommended: 1600x1200px+)
+   */
+  desktopImage: string | Media;
+  /**
+   * Portrait image — mobile e dekhabe (recommended: 800x1000px). Fakha rakhle desktop image use hobe.
+   */
+  mobileImage?: (string | null) | Media;
+  /**
+   * Choto number age dekhabe
+   */
+  order?: number | null;
+  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -403,38 +409,43 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
+        relationTo: 'customers';
+        value: string | Customer;
+      } | null)
+    | ({
         relationTo: 'media';
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'faculty';
-        value: string | Faculty;
+        relationTo: 'products';
+        value: string | Product;
       } | null)
     | ({
-        relationTo: 'research';
-        value: string | Research;
+        relationTo: 'categories';
+        value: string | Category;
       } | null)
     | ({
-        relationTo: 'notices';
-        value: string | Notice;
+        relationTo: 'orders';
+        value: string | Order;
       } | null)
     | ({
         relationTo: 'gallery';
         value: string | Gallery;
       } | null)
     | ({
-        relationTo: 'study-materials';
-        value: string | StudyMaterial;
-      } | null)
-    | ({
-        relationTo: 'contact-messages';
-        value: string | ContactMessage;
+        relationTo: 'hero-slides';
+        value: string | HeroSlide;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -444,10 +455,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   key?: string | null;
   value?:
     | {
@@ -498,6 +514,30 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -518,84 +558,73 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faculty_select".
+ * via the `definition` "products_select".
  */
-export interface FacultySelect<T extends boolean = true> {
+export interface ProductsSelect<T extends boolean = true> {
   name?: T;
-  nameBn?: T;
-  designation?: T;
-  photo?: T;
-  email?: T;
-  phone?: T;
-  qualifications?:
-    | T
-    | {
-        degree?: T;
-        id?: T;
-      };
-  specialization?: T;
-  bio?: T;
-  bioBn?: T;
-  researchInterests?:
-    | T
-    | {
-        interest?: T;
-        id?: T;
-      };
-  publications?: T;
-  joinDate?: T;
-  order?: T;
-  isCurrent?: T;
   slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "research_select".
- */
-export interface ResearchSelect<T extends boolean = true> {
-  title?: T;
-  authors?:
+  description?: T;
+  category?: T;
+  price?: T;
+  salePrice?: T;
+  images?: T;
+  sizes?:
     | T
     | {
-        authorName?: T;
+        size?: T;
+        stock?: T;
         id?: T;
       };
-  facultyAuthors?: T;
-  journal?: T;
-  publishYear?: T;
-  volume?: T;
-  pages?: T;
-  doi?: T;
-  abstract?: T;
-  category?: T;
-  file?: T;
-  externalLink?: T;
+  colors?:
+    | T
+    | {
+        colorName?: T;
+        colorCode?: T;
+        id?: T;
+      };
+  sku?: T;
   isFeatured?: T;
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "notices_select".
+ * via the `definition` "categories_select".
  */
-export interface NoticesSelect<T extends boolean = true> {
-  title?: T;
-  titleBn?: T;
-  category?: T;
-  content?: T;
-  attachments?:
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  image?: T;
+  parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderNumber?: T;
+  customer?: T;
+  customerName?: T;
+  customerPhone?: T;
+  customerEmail?: T;
+  shippingAddress?: T;
+  items?:
     | T
     | {
-        file?: T;
-        label?: T;
+        product?: T;
+        size?: T;
+        color?: T;
+        quantity?: T;
+        priceAtPurchase?: T;
         id?: T;
       };
-  publishDate?: T;
-  expiryDate?: T;
-  isImportant?: T;
-  isPublished?: T;
+  total?: T;
+  paymentMethod?: T;
+  paymentStatus?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -620,33 +649,17 @@ export interface GallerySelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "study-materials_select".
+ * via the `definition` "hero-slides_select".
  */
-export interface StudyMaterialsSelect<T extends boolean = true> {
-  title?: T;
-  subject?: T;
-  year?: T;
-  type?: T;
-  file?: T;
-  description?: T;
-  uploadedBy?: T;
-  downloadCount?: T;
-  isPublic?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-messages_select".
- */
-export interface ContactMessagesSelect<T extends boolean = true> {
-  name?: T;
-  email?: T;
-  phone?: T;
-  subject?: T;
-  message?: T;
-  status?: T;
-  adminNote?: T;
+export interface HeroSlidesSelect<T extends boolean = true> {
+  headline?: T;
+  eyebrow?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  desktopImage?: T;
+  mobileImage?: T;
+  order?: T;
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
 }

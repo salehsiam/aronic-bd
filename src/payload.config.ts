@@ -7,14 +7,19 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Users } from './collections/Users'
+
 import { Media } from './collections/Media'
-import { Faculty } from './collections/Faculty'
-import { Notices } from './collections/Notices'
-import { Research } from './collections/Research'
+
 import { Gallery } from './collections/Gallery'
-import { StudyMaterials } from './collections/StudyMaterials'
-import { ContactMessages } from './collections/ContactMessages'
+
+import { Categories } from './collections/Categories'
+import { Orders } from './collections/Orders'
+import { Products } from './collections/Products'
+import { Users } from './collections/Users'
+import { Customers } from './collections/Customers'
+import { HeroSlides } from './collections/HeroSlides'
+
+
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -32,7 +37,7 @@ const cloudinaryAdapter = {
       cloudinary.uploader
         .upload_stream(
           {
-            folder: 'forensic-mmc',
+            folder: 'aronic',
             resource_type: 'auto',
             public_id: `${Date.now()}-${file.filename.replace(/\.[^/.]+$/, '')}`,
           },
@@ -69,7 +74,7 @@ export default buildConfig({
       titleSuffix: '— Forensic Medicine MMC',
     },
   },
-  collections: [Users, Media, Faculty, Research, Notices, Gallery, StudyMaterials, ContactMessages],
+  collections: [Users, Customers, Media, Products, Categories, Orders, Gallery, HeroSlides],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
