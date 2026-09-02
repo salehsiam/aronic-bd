@@ -58,7 +58,7 @@ export default async function AccountPage() {
             </div>
             <div>
               <p className="text-ink/50">Phone</p>
-              <p className="text-ink mt-1">{customer.phone}</p>
+              <p className="text-ink mt-1">{(customer as any).phone}</p>
             </div>
           </div>
         </div>
