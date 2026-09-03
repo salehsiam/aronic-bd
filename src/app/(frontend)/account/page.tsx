@@ -27,9 +27,12 @@ export default async function AccountPage() {
     redirect('/account/login')
   }
 
+  const customerData = customer as any
+
+
   const orders = await payload.find({
     collection: 'orders',
-    where: { customer: { equals: customer.id } },
+    where: { customer: { equals: customerData.id } },
     sort: '-createdAt',
     limit: 20,
   })
@@ -42,7 +45,7 @@ export default async function AccountPage() {
             <p className="font-mono text-xs uppercase tracking-widest text-rust mb-2">
               My Account
             </p>
-            <h1 className="font-display text-4xl text-ink">Hello, {customer.name}</h1>
+            <h1 className="font-display text-4xl text-ink">Hello, {customerData.name}</h1>
           </div>
           <LogoutButton />
         </div>
@@ -54,11 +57,11 @@ export default async function AccountPage() {
           <div className="grid grid-cols-2 gap-4 text-sm font-body">
             <div>
               <p className="text-ink/50">Email</p>
-              <p className="text-ink mt-1">{customer.email}</p>
+              <p className="text-ink mt-1">{customerData.email}</p>
             </div>
             <div>
               <p className="text-ink/50">Phone</p>
-              <p className="text-ink mt-1">{(customer as any).phone}</p>
+              <p className="text-ink mt-1">{customerData.phone}</p>
             </div>
           </div>
         </div>

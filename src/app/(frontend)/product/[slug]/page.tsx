@@ -20,7 +20,7 @@ export async function generateMetadata({
 
   return {
     title: product.name,
-    description: product.description || `Shop ${product.name} at Aronic`,
+    description: `Shop ${product.name} at Aronic`,
   }
 }
 
@@ -67,22 +67,22 @@ export default async function ProductPage({
 
           <div className="md:pt-2">
             <p className="font-mono text-xs uppercase tracking-widest text-rust mb-2">
-              {product.category?.name}
+              {(product.category as any)?.name}
             </p>
             <h1 className="font-display text-3xl md:text-4xl text-ink mb-4">{product.name}</h1>
 
             <AddToCartPanel product={product} />
 
-        {product.description && (
-  <div className="mt-10 pt-8 border-t border-line">
-    <p className="font-mono text-xs uppercase tracking-widest text-ink/50 mb-3">
-      Description
-    </p>
-    <div className="font-body text-sm text-ink/70 leading-relaxed">
-      <RichText data={product.description} />
-    </div>
-  </div>
-)}
+            {product.description && (
+              <div className="mt-10 pt-8 border-t border-line">
+                <p className="font-mono text-xs uppercase tracking-widest text-ink/50 mb-3">
+                  Description
+                </p>
+                <div className="font-body text-sm text-ink/70 leading-relaxed">
+                  <RichText data={product.description} />
+                </div>
+              </div>
+            )}
 
             {product.sku && (
               <p className="font-mono text-xs text-ink/40 mt-6">SKU: {product.sku}</p>

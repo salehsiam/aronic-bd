@@ -18,6 +18,7 @@ import { Products } from './collections/Products'
 import { Users } from './collections/Users'
 import { Customers } from './collections/Customers'
 import { HeroSlides } from './collections/HeroSlides'
+import { CollectionBanners } from './collections/CollectionBanners'
 
 
 
@@ -74,7 +75,7 @@ export default buildConfig({
       titleSuffix: '— Forensic Medicine MMC',
     },
   },
-  collections: [Users, Customers, Media, Products, Categories, Orders, Gallery, HeroSlides],
+  collections: [Users, Customers, Media, Products, Categories, Orders, Gallery, HeroSlides, CollectionBanners],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

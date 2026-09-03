@@ -148,3 +148,16 @@ export async function getHeroSlides() {
 
   return result.docs
 }
+
+export async function getCollectionBanners() {
+  const payload = await getPayload({ config })
+
+  const result = await payload.find({
+    collection: 'collection-banners',
+    where: { isActive: { equals: true } },
+    sort: 'order',
+    depth: 2,
+  })
+
+  return result.docs
+}

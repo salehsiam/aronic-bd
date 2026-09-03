@@ -9,6 +9,20 @@ export const Products: CollectionConfig = {
   access: {
     read: () => true, // sobai dekhte parbe (public shop page)
   },
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (data?.discountPercent && data.discountPercent > 0 && data?.price) {
+          const calculated = data.price - (data.price * data.discountPercent) / 100
+          data.salePrice = Math.round(calculated)
+        } else if (!data?.discountPercent) {
+          // Discount percent khali/0 hole salePrice o clear hoye jabe
+          data.salePrice = null
+        }
+        return data
+      },
+    ],
+  },
   fields: [
     {
       name: 'name',
@@ -41,11 +55,21 @@ export const Products: CollectionConfig = {
       min: 0,
     },
     {
+      name: 'discountPercent',
+      type: 'number',
+      min: 0,
+      max: 90,
+      admin: {
+        description: 'Discount ',
+      },
+    },
+    {
       name: 'salePrice',
       type: 'number',
       min: 0,
       admin: {
-        description: 'Discount price thakle bosao, na thakle khali rakho',
+        description: 'Automatic calculate ',
+        readOnly: false,
       },
     },
     {

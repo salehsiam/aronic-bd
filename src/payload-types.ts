@@ -76,6 +76,7 @@ export interface Config {
     orders: Order;
     gallery: Gallery;
     'hero-slides': HeroSlide;
+    'collection-banners': CollectionBanner;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -91,6 +92,7 @@ export interface Config {
     orders: OrdersSelect<false> | OrdersSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
     'hero-slides': HeroSlidesSelect<false> | HeroSlidesSelect<true>;
+    'collection-banners': CollectionBannersSelect<false> | CollectionBannersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -252,7 +254,11 @@ export interface Product {
   category: string | Category;
   price: number;
   /**
-   * Discount price thakle bosao, na thakle khali rakho
+   * Discount
+   */
+  discountPercent?: number | null;
+  /**
+   * Automatic calculate
    */
   salePrice?: number | null;
   images: (string | Media)[];
@@ -382,6 +388,39 @@ export interface HeroSlide {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collection-banners".
+ */
+export interface CollectionBanner {
+  id: string;
+  /**
+   * Enter chepe line break disho (jemon: Everyday Essentials\nMen's Collection)
+   */
+  title: string;
+  /**
+   * Choto label (jemon: New Season)
+   */
+  eyebrow?: string | null;
+  image: string | Media;
+  ctaText?: string | null;
+  /**
+   * Jemon: /shop?category=men
+   */
+  ctaLink: string;
+  /**
+   * Ei category theke product niche dekhabe
+   */
+  category: string | Category;
+  /**
+   * Koyta product dekhabe (default 8)
+   */
+  productCount?: number | null;
+  order?: number | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -435,6 +474,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'hero-slides';
         value: string | HeroSlide;
+      } | null)
+    | ({
+        relationTo: 'collection-banners';
+        value: string | CollectionBanner;
       } | null);
   globalSlug?: string | null;
   user:
@@ -566,6 +609,7 @@ export interface ProductsSelect<T extends boolean = true> {
   description?: T;
   category?: T;
   price?: T;
+  discountPercent?: T;
   salePrice?: T;
   images?: T;
   sizes?:
@@ -658,6 +702,23 @@ export interface HeroSlidesSelect<T extends boolean = true> {
   ctaLink?: T;
   desktopImage?: T;
   mobileImage?: T;
+  order?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collection-banners_select".
+ */
+export interface CollectionBannersSelect<T extends boolean = true> {
+  title?: T;
+  eyebrow?: T;
+  image?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  category?: T;
+  productCount?: T;
   order?: T;
   isActive?: T;
   updatedAt?: T;
