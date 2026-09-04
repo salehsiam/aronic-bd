@@ -1,117 +1,83 @@
+'use client'
+
 import Link from 'next/link'
-import { Home, ArrowLeft, Bell, Users, FlaskConical, Phone } from 'lucide-react'
-import GoBackButton from '@/components/ui/GoBackButton'
-import logo from './../../public/logo.png'
-import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { ArrowRight, Search } from 'lucide-react'
+import { Fraunces, Work_Sans, JetBrains_Mono } from 'next/font/google'
+import './globals.css'
+
+const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', weight: ['400', '600'] })
+const workSans = Work_Sans({ subsets: ['latin'], variable: '--font-body', weight: ['400', '500'] })
+const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', weight: ['400', '500'] })
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header Simple */}
-      <div className="bg-green-900 py-4">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-green-400 to-green-700 flex items-center justify-center text-base">
-            <Image src={logo} alt="Logo" width={56} height={56} />
-          </div>
-          <div>
-            <div className="font-display text-white text-sm leading-tight">
-              Department of Forensic Medicine & Toxicology
-            </div>
-            <div className="font-bn text-green-300 text-xs">ময়মনসিংহ মেডিক্যাল কলেজ</div>
-          </div>
-        </div>
-      </div>
-
-      {/* 404 Content */}
-      <div className="flex-1 flex items-center justify-center px-4 py-16">
-        <div className="text-center max-w-lg">
-          {/* 404 Number */}
-          <div className="relative mb-8">
-            <div className="font-display text-[10rem] md:text-[14rem] text-green-100 leading-none select-none">
-              404
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 md:w-28 md:h-28 rounded-full bg-green-900 flex items-center justify-center shadow-2xl">
-                <span className="text-3xl md:text-5xl">🔍</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Message */}
-          <h1 className="font-display text-2xl md:text-3xl text-gray-900 mb-3">Page Not Found</h1>
-          <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-2">
-            The page you are looking for does not exist or has been moved.
-          </p>
-          <p className="font-bn text-gray-400 text-sm mb-8">
-            আপনি যে পেজটি খুঁজছেন সেটি পাওয়া যায়নি।
-          </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition-all"
+    <html lang="en" className={`${fraunces.variable} ${workSans.variable} ${mono.variable}`}>
+      <body className="font-body bg-cotton text-ink">
+        <div className="min-h-screen flex items-center justify-center bg-cotton px-6 overflow-hidden">
+          <div className="text-center max-w-md relative">
+            <motion.div
+              initial={{ opacity: 0, y: -20, rotate: -6 }}
+              animate={{
+                opacity: 1,
+                y: [0, -10, 0],
+                rotate: [-6, 4, -6],
+              }}
+              transition={{
+                opacity: { duration: 0.6 },
+                y: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
+                rotate: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
+              }}
+              className="inline-block mb-8"
             >
-              <Home className="w-4 h-4" />
-              Go to Homepage
-            </Link>
-            <GoBackButton />
-          </div>
+              <div className="relative w-24 h-28 bg-cotton border-2 border-dashed border-ink flex flex-col items-center justify-center shadow-sm">
+                <div className="absolute top-2.5 w-3 h-3 rounded-full border-2 border-ink bg-cotton" />
+                <span className="font-mono text-4xl text-rust">?</span>
+                <span className="font-mono text-[10px] text-ink/40 uppercase tracking-widest mt-1">
+                  Not Found
+                </span>
+              </div>
+            </motion.div>
 
-          {/* Quick Links */}
-          <div>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-widest mb-4">
-              Or visit these pages
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[
-                {
-                  label: 'Notices',
-                  href: '/notices',
-                  icon: Bell,
-                  color: 'bg-yellow-50 text-yellow-700 border-yellow-200 hover:bg-yellow-100',
-                },
-                {
-                  label: 'Faculty',
-                  href: '/faculty',
-                  icon: Users,
-                  color: 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100',
-                },
-                {
-                  label: 'Research',
-                  href: '/research',
-                  icon: FlaskConical,
-                  color: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
-                },
-                {
-                  label: 'Contact',
-                  href: '/contact',
-                  icon: Phone,
-                  color: 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
-                },
-              ].map((item) => (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              <p className="font-display text-7xl md:text-8xl text-ink/10 leading-none mb-2">
+                404
+              </p>
+              <p className="font-mono text-xs uppercase tracking-widest text-rust mb-3">
+                Lost in the Rack
+              </p>
+              <h1 className="font-display text-2xl md:text-3xl text-ink mb-4">
+                This tag's come untied
+              </h1>
+              <p className="font-body text-sm text-ink/50 mb-10">
+                The page you're looking for has been moved, sold out, or never existed. Let's
+                get you back to browsing.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${item.color}`}
+                  href="/"
+                  className="group inline-flex items-center gap-2 bg-ink text-cotton px-6 py-3 text-sm font-body hover:bg-indigo transition-colors w-full sm:w-auto justify-center"
                 >
-                  <item.icon className="w-5 h-5" />
-                  <span className="text-xs font-semibold">{item.label}</span>
+                  Back to Home
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
-              ))}
-            </div>
+                <Link
+                  href="/shop"
+                  className="inline-flex items-center gap-2 border border-ink/20 text-ink px-6 py-3 text-sm font-body hover:border-ink transition-colors w-full sm:w-auto justify-center"
+                >
+                  <Search className="w-4 h-4" />
+                  Browse Shop
+                </Link>
+              </div>
+            </motion.div>
           </div>
         </div>
-      </div>
-
-      {/* Footer Simple */}
-      <div className="bg-green-900 py-4">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 text-center">
-          <p className="text-white/40 text-xs">
-            © 2025 Forensic Medicine Dept., Mymensingh Medical College
-          </p>
-        </div>
-      </div>
-    </div>
+      </body>
+    </html>
   )
 }

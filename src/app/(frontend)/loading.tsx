@@ -1,113 +1,58 @@
-import { Skeleton } from '@/components/ui/Skeleton'
+'use client'
 
-export default function HomeLoading() {
+import { motion } from 'framer-motion'
+
+export default function Loading() {
   return (
-    <div>
-      {/* Hero Skeleton */}
-      <div className="bg-green-900 min-h-[480px] flex items-center">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-16 w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <div className="space-y-4">
-            <Skeleton className="h-6 w-48 bg-green-800" />
-            <Skeleton className="h-12 w-full bg-green-800" />
-            <Skeleton className="h-12 w-3/4 bg-green-800" />
-            <Skeleton className="h-4 w-full bg-green-800" />
-            <Skeleton className="h-4 w-5/6 bg-green-800" />
-            <div className="flex gap-3 mt-6">
-              <Skeleton className="h-11 w-36 bg-green-800" />
-              <Skeleton className="h-11 w-32 bg-green-800" />
-            </div>
+    <div className="min-h-screen bg-cotton flex flex-col items-center justify-center gap-8">
+      {/* Swinging hang-tag loader */}
+      <div className="relative" style={{ perspective: 400 }}>
+        <motion.div
+          animate={{ rotate: [-8, 8, -8] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ transformOrigin: 'top center' }}
+          className="relative"
+        >
+          {/* String */}
+          <div className="w-px h-6 bg-ink/30 mx-auto" />
+
+          {/* Tag */}
+          <div className="relative w-16 h-20 bg-cotton border-2 border-dashed border-ink flex flex-col items-center justify-center">
+            {/* Hole */}
+            <div className="absolute top-2 w-2.5 h-2.5 rounded-full border-2 border-ink bg-cotton" />
+            <span className="font-display text-2xl text-indigo mt-2">A</span>
           </div>
-          <Skeleton className="hidden lg:block h-64 w-full bg-green-800 rounded-2xl" />
-        </div>
+        </motion.div>
       </div>
 
-      {/* Stats Skeleton */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 grid grid-cols-2 lg:grid-cols-4">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="py-6 text-center border-r border-gray-200 last:border-0">
-              <Skeleton className="h-10 w-20 mx-auto mb-2" />
-              <Skeleton className="h-4 w-28 mx-auto" />
-            </div>
+      {/* Wordmark */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center"
+      >
+        <p className="font-display text-2xl text-ink tracking-tight">Aronic</p>
+
+        {/* Loading dots */}
+        <div className="flex items-center justify-center gap-1.5 mt-3">
+          {[0, 1, 2].map((i) => (
+            <motion.span
+              key={i}
+              animate={{ opacity: [0.25, 1, 0.25] }}
+              transition={{
+                duration: 1.2,
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: 'easeInOut',
+              }}
+              className={`w-1.5 h-1.5 rounded-full ${
+                i === 0 ? 'bg-ink' : i === 1 ? 'bg-indigo' : 'bg-rust'
+              }`}
+            />
           ))}
         </div>
-      </div>
-
-      {/* Notices Skeleton */}
-      <div className="bg-gray-50 py-12 md:py-16">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="flex justify-between mb-7">
-            <div className="space-y-2">
-              <Skeleton className="h-3 w-24" />
-              <Skeleton className="h-8 w-40" />
-            </div>
-            <Skeleton className="h-4 w-24" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl p-5 flex gap-4">
-                <Skeleton className="w-10 h-10 flex-shrink-0" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-4 w-16" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-3 w-24" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Faculty Skeleton */}
-      <div className="py-12 md:py-16">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="flex justify-between mb-7">
-            <div className="space-y-2">
-              <Skeleton className="h-3 w-20" />
-              <Skeleton className="h-8 w-44" />
-            </div>
-            <Skeleton className="h-4 w-20" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <Skeleton className="w-full aspect-square" />
-                <div className="p-4 space-y-2">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-3 w-3/4" />
-                  <Skeleton className="h-3 w-1/2" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Research Skeleton */}
-      <div className="bg-gray-50 py-12 md:py-16">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="flex justify-between mb-7">
-            <div className="space-y-2">
-              <Skeleton className="h-3 w-28" />
-              <Skeleton className="h-8 w-52" />
-            </div>
-            <Skeleton className="h-4 w-16" />
-          </div>
-          <div className="flex flex-col gap-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl p-5 flex gap-4">
-                <Skeleton className="w-14 h-10 flex-shrink-0" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-3 w-3/4" />
-                  <Skeleton className="h-3 w-1/2" />
-                  <Skeleton className="h-5 w-28 rounded-full" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
