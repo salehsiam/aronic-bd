@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const orderId = formData.get('value_a') as string
   const tranId = formData.get('tran_id') as string
 
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000'
 
   try {
     const payload = await getPayload({ config })
