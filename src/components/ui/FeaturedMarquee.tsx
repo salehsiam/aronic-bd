@@ -93,7 +93,7 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
                             initial={{ opacity: 0, x: direction > 0 ? 40 : -40 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: direction > 0 ? -40 : 40 }}
-                            transition={{ duration: 0.2, ease: 'easeOut' }}
+                            transition={{ duration: 0.1, ease: 'easeOut' }}
                             drag="x"
                             dragConstraints={{ left: 0, right: 0 }}
                             dragElastic={0.15}

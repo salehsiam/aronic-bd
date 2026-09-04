@@ -101,11 +101,11 @@ export default async function HomePage() {
               <p className="font-mono text-xs uppercase tracking-widest text-rust mb-2">
                 Handpicked
               </p>
-              <h2 className="font-display text-3xl text-ink">Featured Pieces</h2>
+              <h2 className="font-display text-3xl text-ink">Top Featured</h2>
             </div>
             <Link
               href="/shop"
-              className="hidden md:flex items-center gap-1.5 font-body text-sm text-ink/60 hover:text-ink transition-colors"
+              className="flex items-center gap-1.5 font-body text-sm text-ink/60 hover:text-ink transition-colors"
             >
               View All <ArrowRight className="w-3.5 h-3.5" />
             </Link>
