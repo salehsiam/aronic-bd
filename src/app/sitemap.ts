@@ -5,59 +5,66 @@ import config from '@payload-config'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayload({ config })
 
-  const { docs: faculty } = await payload.find({
-    collection: 'faculty',
+  const { docs: products } = await payload.find({
+    collection: 'products',
+    where: { isActive: { equals: true } },
+    limit: 500,
+  })
+
+  const { docs: categories } = await payload.find({
+    collection: 'categories',
     limit: 100,
   })
 
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
   const staticPages = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1 },
+    { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1 },
     {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/faculty`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/notices`,
+      url: `${baseUrl}/shop`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/research`,
+      url: `${baseUrl}/new-arrivals`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/featured`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/gallery`,
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
-      priority: 0.6,
+      priority: 0.5,
     },
     {
-      url: `${baseUrl}/contact`,
+      url: `${baseUrl}/track-order`,
       lastModified: new Date(),
-      changeFrequency: 'yearly' as const,
-      priority: 0.5,
+      changeFrequency: 'monthly' as const,
+      priority: 0.3,
     },
   ]
 
-  const facultyPages = faculty.map((member: any) => ({
-    url: `${baseUrl}/faculty/${member.slug || member.id}`,
-    lastModified: new Date(member.updatedAt),
-    changeFrequency: 'monthly' as const,
+  const productPages = products.map((product: any) => ({
+    url: `${baseUrl}/product/${product.slug}`,
+    lastModified: new Date(product.updatedAt),
+    changeFrequency: 'weekly' as const,
     priority: 0.7,
   }))
 
-  return [...staticPages, ...facultyPages]
+  const categoryPages = categories.map((cat: any) => ({
+    url: `${baseUrl}/shop?category=${cat.slug}`,
+    lastModified: new Date(cat.updatedAt),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }))
+
+  return [...staticPages, ...productPages, ...categoryPages]
 }

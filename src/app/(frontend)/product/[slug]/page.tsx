@@ -35,7 +35,7 @@ export default async function ProductPage({
   if (!product) notFound()
 
   const relatedProducts = product.category
-    ? await getRelatedProducts(product.category.id, product.id)
+    ? await getRelatedProducts((product.category as any).id, product.id)
     : []
 
   return (
@@ -50,11 +50,10 @@ export default async function ProductPage({
           {product.category && (
             <>
               <Link
-                href={`/shop?category=${product.category.slug}`}
+                href={`/shop?category=${(product.category as any).slug}`}
                 className="hover:text-ink transition-colors"
               >
-                {product.category.name}
-              </Link>
+                {(product.category as any).name}              </Link>
               <span>/</span>
             </>
           )}
