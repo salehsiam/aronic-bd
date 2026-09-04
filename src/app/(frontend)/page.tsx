@@ -1,31 +1,18 @@
 import Link from 'next/link'
 import { ArrowRight, Truck, Wallet, RotateCcw } from 'lucide-react'
-import { getFeaturedProducts, getCategories, getHeroSlides, getCollectionBanners,getProducts } from '@/lib/getProducts'
+import { getFeaturedProducts, getCategories, getHeroSlides, getCollectionBanners, getProducts } from '@/lib/getProducts'
 import { ProductCard } from '@/components/ui/ProductCard'
 import { HeroCarousel } from '@/components/ui/HeroCarousel'
 import { CategoryRow } from '@/components/ui/CategoryRow'
-import { CollectionBanner } from '@/components/ui/CollectionBanner'
+import { FeaturedMarquee } from '@/components/ui/FeaturedMarquee'
 
 
 export default async function HomePage() {
-  const [featuredProducts, categories, heroSlidesRaw, collectionBanners] = await Promise.all([
+  const [featuredProducts, categories, heroSlidesRaw] = await Promise.all([
     getFeaturedProducts(),
     getCategories(),
     getHeroSlides(),
-    getCollectionBanners(),
   ])
-  const bannersWithProducts = await Promise.all(
-    collectionBanners.map(async (banner: any) => {
-      const categorySlug = banner.category?.slug
-      const products = categorySlug
-        ? await getProducts({ categorySlug, sort: 'newest' })
-        : []
-      return {
-        ...banner,
-        products: products.slice(0, banner.productCount || 8),
-      }
-    }),
-  )
 
   const slides = heroSlidesRaw.map((s: any) => ({
     id: s.id,
@@ -104,29 +91,8 @@ export default async function HomePage() {
           <CategoryRow categories={categories} />
         </section>
       )}
-   
-      {/* ── COLLECTION BANNERS + THEIR PRODUCTS ── */}
-{bannersWithProducts.map((banner: any) => (
-  <section key={banner.id}>
-    <CollectionBanner
-      image={banner.image?.url}
-      eyebrow={banner.eyebrow}
-      title={banner.title}
-      ctaText={banner.ctaText}
-      ctaLink={banner.ctaLink}
-    />
 
-    {banner.products.length > 0 && (
-      <div className="max-w-7xl mx-auto px-6 py-14">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
-          {banner.products.map((product: any) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </div>
-    )}
-  </section>
-))}
+
 
       {/* ── FEATURED PRODUCTS ── */}
       {featuredProducts.length > 0 && (
@@ -146,11 +112,8 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <FeaturedMarquee products={featuredProducts} />
+
         </section>
       )}
     </div>
