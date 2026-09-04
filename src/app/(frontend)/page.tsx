@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Truck, Wallet, RotateCcw } from 'lucide-react'
 import { getFeaturedProducts, getCategories, getHeroSlides, getCollectionBanners, getProducts } from '@/lib/getProducts'
-import { ProductCard } from '@/components/ui/ProductCard'
 import { HeroCarousel } from '@/components/ui/HeroCarousel'
 import { CategoryRow } from '@/components/ui/CategoryRow'
 import { FeaturedMarquee } from '@/components/ui/FeaturedMarquee'
@@ -50,7 +49,7 @@ export default async function HomePage() {
 
 
       {/* ── USP STRIP ── */}
-      <section className="max-w-7xl mx-auto px-6 py-14 border-b border-line">
+      {/* <section className="max-w-7xl mx-auto px-6 py-14 border-b border-line">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
@@ -80,7 +79,7 @@ export default async function HomePage() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* ── CATEGORY ROW (compact) ── */}
       {categories.length > 0 && (
