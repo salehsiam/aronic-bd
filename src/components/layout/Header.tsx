@@ -9,19 +9,20 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { getCurrentCustomer } from '@/lib/customerAuth'
 import { SearchOverlay } from '../ui/SearchOverlay'
+import { ChevronDown } from 'lucide-react'
+
 
 
 
 
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Shop', href: '/shop' },
   { label: 'New Arrivals', href: '/new-arrivals' },
   { label: 'Featured', href: '/featured' },
   { label: 'About', href: '/about' },
 ]
 
-export default function Header() {
+export default function Header({ categories = [] }: { categories?: any[] }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -29,7 +30,8 @@ export default function Header() {
   const { scrollY } = useScroll()
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
-
+  const [shopOpen, setShopOpen] = useState(false)
+  const [mobileShopOpen, setMobileShopOpen] = useState(false)
   useMotionValueEvent(scrollY, 'change', (latest) => {
     const previous = lastScrollY.current
     const diff = latest - previous
@@ -86,6 +88,9 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 flex-1">
+
+
+            {/* Rest of nav items */}
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -103,6 +108,76 @@ export default function Header() {
                 </Link>
               )
             })}
+            {/* Shop with dropdown */}
+            <div
+              className="relative py-2"
+              onMouseEnter={() => setShopOpen(true)}
+              onMouseLeave={() => setShopOpen(false)}
+            >
+              <Link href="/shop" className="relative group flex items-center gap-1">
+                <span
+                  className={`text-sm font-body transition-colors ${pathname === '/shop' ? 'text-ink' : 'text-ink/60 group-hover:text-ink'
+                    }`}
+                >
+                  Shop
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-ink/50 transition-transform ${shopOpen ? 'rotate-180' : ''}`}
+                />
+                <span
+                  className={`absolute left-0 -bottom-0.5 h-[1.5px] bg-indigo transition-all duration-300 ${pathname === '/shop' ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}
+                />
+              </Link>
+              {/* Mega menu dropdown */}
+              <AnimatePresence>
+                {shopOpen && categories.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    className="absolute top-full left-0 mt-1 bg-cotton border border-line shadow-xl p-6 z-50 w-[420px]"
+                  >
+                    <div className="grid grid-cols-3 gap-4">
+                      {categories.slice(0, 6).map((cat: any) => (
+                        <Link
+                          key={cat.id}
+                          href={`/shop?category=${cat.slug}`}
+                          onClick={() => setShopOpen(false)}
+                          className="group/item flex flex-col items-center gap-2"
+                        >
+                          <div className="relative w-20 h-24 bg-line overflow-hidden shrink-0">
+                            {cat.image?.url ? (
+                              <img
+                                src={cat.image.url}
+                                alt={cat.name}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-105"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <span className="font-display text-base text-ink/25">{cat.name[0]}</span>
+                              </div>
+                            )}
+                          </div>
+                          <span className="font-body text-xs text-center text-ink/80 group-hover/item:text-ink transition-colors">
+                            {cat.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+
+                    <Link
+                      href="/shop"
+                      onClick={() => setShopOpen(false)}
+                      className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-indigo mt-5 pt-5 border-t border-line hover:gap-2.5 transition-all"
+                    >
+                      View All Products →
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </nav>
 
 
@@ -193,6 +268,7 @@ export default function Header() {
               </div>
 
               <div className="flex flex-col py-2">
+
                 {navItems.map((item, idx) => {
                   const isActive = pathname === item.href
                   return (
@@ -218,6 +294,49 @@ export default function Header() {
                     </motion.div>
                   )
                 })}
+
+                {/* Shop accordion */}
+                <div className="border-b border-line">
+                  <button
+                    onClick={() => setMobileShopOpen(!mobileShopOpen)}
+                    className="w-full flex items-center justify-between px-6 py-3.5 text-sm font-body text-ink/70"
+                  >
+                    Shop
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${mobileShopOpen ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {mobileShopOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="overflow-hidden bg-line/30"
+                      >
+                        <Link
+                          href="/shop"
+                          onClick={() => setMenuOpen(false)}
+                          className="block px-10 py-2.5 text-sm font-body text-indigo font-medium"
+                        >
+                          All Products
+                        </Link>
+                        {categories.map((cat: any) => (
+                          <Link
+                            key={cat.id}
+                            href={`/shop?category=${cat.slug}`}
+                            onClick={() => setMenuOpen(false)}
+                            className="block px-10 py-2.5 text-sm font-body text-ink/70"
+                          >
+                            {cat.name}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
 
               <motion.div

@@ -2,16 +2,35 @@ import Link from 'next/link'
 import { ArrowRight, Truck, Wallet, RotateCcw } from 'lucide-react'
 import { getFeaturedProducts, getCategories, getHeroSlides, getCollectionBanners, getProducts } from '@/lib/getProducts'
 import { HeroCarousel } from '@/components/ui/HeroCarousel'
-import { CategoryRow } from '@/components/ui/CategoryRow'
+// import { CategoryRow } from '@/components/ui/CategoryRow'
 import { FeaturedMarquee } from '@/components/ui/FeaturedMarquee'
+import { CollectionBanner } from '@/components/ui/CollectionBanner'
+import { ProductCard } from '@/components/ui/ProductCard'
 
 
 export default async function HomePage() {
-  const [featuredProducts, categories, heroSlidesRaw] = await Promise.all([
-    getFeaturedProducts(),
-    getCategories(),
-    getHeroSlides(),
-  ])
+  const [featuredProducts,
+    categories,
+    heroSlidesRaw, collectionBanners] = await Promise.all([
+      getFeaturedProducts(),
+      getCategories(),
+      getHeroSlides(),
+      getCollectionBanners(),
+    ])
+
+  // Protiটা banner-er jonno tar category-r product fetch koro
+  const bannersWithProducts = await Promise.all(
+    collectionBanners.map(async (banner: any) => {
+      const categorySlug = banner.category?.slug
+      const products = categorySlug
+        ? await getProducts({ categorySlug, sort: 'newest' })
+        : []
+      return {
+        ...banner,
+        products: products.slice(0, banner.productCount || 8),
+      }
+    }),
+  )
 
   const slides = heroSlidesRaw.map((s: any) => ({
     id: s.id,
@@ -82,14 +101,11 @@ export default async function HomePage() {
       </section> */}
 
       {/* ── CATEGORY ROW (compact) ── */}
-      {categories.length > 0 && (
+      {/* {categories.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 py-12 border-b border-line">
-          {/* <p className="font-mono text-xs uppercase tracking-widest text-rust mb-5">
-           Shop by Category
-          </p> */}
           <CategoryRow categories={categories} />
         </section>
-      )}
+      )} */}
 
 
 
@@ -114,7 +130,32 @@ export default async function HomePage() {
           <FeaturedMarquee products={featuredProducts} />
 
         </section>
+
+
       )}
+
+      {/* ── COLLECTION BANNERS + THEIR PRODUCTS ── */}
+      {bannersWithProducts.map((banner: any) => (
+        <section key={banner.id}>
+          <CollectionBanner
+            image={banner.image?.url}
+            eyebrow={banner.eyebrow}
+            title={banner.title}
+            ctaText={banner.ctaText}
+            ctaLink={banner.ctaLink}
+          />
+
+          {banner.products.length > 0 && (
+            <div className="max-w-7xl mx-auto px-6 py-14">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+                {banner.products.map((product: any) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      ))}
     </div>
   )
 }

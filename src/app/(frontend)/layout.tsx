@@ -4,6 +4,7 @@ import '../globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics'
+import { getCategories } from '@/lib/getProducts'
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -41,7 +42,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function FrontendLayout({ children }: { children: React.ReactNode }) {
+export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
+  const categories = await getCategories()
   return (
     <html
       lang="en"
@@ -50,7 +52,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
     >
       <body className="font-body bg-cotton text-ink">
         <GoogleAnalytics />
-        <Header />
+        <Header categories={categories} />
         <main>{children}</main>
         <Footer />
       </body>
