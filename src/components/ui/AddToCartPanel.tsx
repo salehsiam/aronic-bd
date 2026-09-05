@@ -16,9 +16,9 @@ export function AddToCartPanel({ product }: { product: any }) {
   const [selectedSize, setSelectedSize] = useState<string | null>(
     inStockSizes[0]?.size || null,
   )
-  const [selectedColor, setSelectedColor] = useState<string | null>(
-    product.colors?.[0]?.colorName || null,
-  )
+  // const [selectedColor, setSelectedColor] = useState<string | null>(
+  //   product.colors?.[0]?.colorName || null,
+  // )
   const [quantity, setQuantity] = useState(1)
 
   const [justAdded, setJustAdded] = useState(false)
@@ -51,7 +51,7 @@ export function AddToCartPanel({ product }: { product: any }) {
         image: image || '',
         price: product.salePrice || product.price,
         size: selectedSize,
-        color: selectedColor || undefined,
+        // color: selectedColor || undefined,
       })
     }
 
@@ -87,14 +87,14 @@ export function AddToCartPanel({ product }: { product: any }) {
           ৳{product.salePrice || product.price}
         </span>
         {product.salePrice && (
-          <span className="font-mono text-base text-ink/35 line-through">
+          <span className="font-mono text-2xl text-ink/35 line-through">
             ৳{product.price}
           </span>
         )}
       </div>
 
       {/* Color selector */}
-      {product.colors?.length > 0 && (
+      {/* {product.colors?.length > 0 && (
         <div className="mb-6">
           <p className="font-mono text-xs uppercase tracking-widest text-ink/50 mb-3">
             Color: <span className="text-ink normal-case">{selectedColor}</span>
@@ -115,7 +115,7 @@ export function AddToCartPanel({ product }: { product: any }) {
             ))}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Size selector */}
       {availableSizes.length > 0 && (
@@ -132,10 +132,10 @@ export function AddToCartPanel({ product }: { product: any }) {
                   onClick={() => !outOfStock && setSelectedSize(s.size)}
                   disabled={outOfStock}
                   className={`w-11 h-11 text-sm font-mono border transition-colors relative ${outOfStock
-                      ? 'border-line text-ink/25 cursor-not-allowed'
-                      : selectedSize === s.size
-                        ? 'bg-ink text-cotton border-ink'
-                        : 'border-ink/20 text-ink hover:border-ink'
+                    ? 'border-line text-ink/25 cursor-not-allowed'
+                    : selectedSize === s.size
+                      ? 'bg-ink text-cotton border-ink'
+                      : 'border-ink/20 text-ink hover:border-ink'
                     }`}
                 >
                   {s.size}

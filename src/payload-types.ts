@@ -269,16 +269,6 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
-  colors?:
-    | {
-        colorName: string;
-        /**
-         * Hex code, jemon #FF0000
-         */
-        colorCode?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   /**
    * Product code, jemon ARN-001
    */
@@ -617,13 +607,6 @@ export interface ProductsSelect<T extends boolean = true> {
     | {
         size?: T;
         stock?: T;
-        id?: T;
-      };
-  colors?:
-    | T
-    | {
-        colorName?: T;
-        colorCode?: T;
         id?: T;
       };
   sku?: T;

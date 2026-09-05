@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics'
 import { getCategories } from '@/lib/getProducts'
+import { FacebookMessengerButton } from '@/components/ui/FacebookMessengerButton'
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -55,6 +56,8 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         <Header categories={categories} />
         <main>{children}</main>
         <Footer />
+        <FacebookMessengerButton />
+
       </body>
     </html>
   )

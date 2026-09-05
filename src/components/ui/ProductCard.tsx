@@ -55,7 +55,6 @@ export function ProductCard({ product }: { product: any }) {
       image: image || '',
       price: product.salePrice || product.price,
       size,
-      color: product.colors?.[0]?.colorName,
     })
 
     setShowSizes(false)
@@ -121,8 +120,8 @@ export function ProductCard({ product }: { product: any }) {
                     onClick={(e) => handleSizeSelect(e, s.size, s.stock)}
                     disabled={outOfStock}
                     className={`w-7 h-7 text-[11px] font-mono border transition-colors ${outOfStock
-                        ? 'border-ink/10 text-ink/25 cursor-not-allowed'
-                        : 'border-ink/25 text-ink hover:bg-ink hover:text-cotton'
+                      ? 'border-ink/10 text-ink/25 cursor-not-allowed'
+                      : 'border-ink/25 text-ink hover:bg-ink hover:text-cotton'
                       }`}
                   >
                     {s.size}
@@ -168,7 +167,7 @@ export function ProductCard({ product }: { product: any }) {
 
         {/* Price */}
         <div className="flex items-center gap-2 mt-1">
-          <span className="font-mono text-sm text-rust">
+          <span className="font-mono text-sm font-semibold text-rust">
             ৳{product.salePrice || product.price}
           </span>
           {product.salePrice && (

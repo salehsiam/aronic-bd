@@ -99,24 +99,6 @@ export const Products: CollectionConfig = {
       ],
     },
     {
-      name: 'colors',
-      type: 'array',
-      fields: [
-        {
-          name: 'colorName',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'colorCode',
-          type: 'text',
-          admin: {
-            description: 'Hex code, jemon #FF0000',
-          },
-        },
-      ],
-    },
-    {
       name: 'sku',
       type: 'text',
       unique: true,
