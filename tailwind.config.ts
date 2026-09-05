@@ -7,21 +7,21 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-  extend: {
-    colors: {
-      cotton: '#F7F4EC',
-      ink: '#1C1B19',
-      indigo: '#2A3B63',
-      rust: '#9C5233',
-      line: '#D9D3C4',
-    },
-    fontFamily: {
-      display: ['var(--font-display)', 'serif'],
-      body: ['var(--font-body)', 'sans-serif'],
-      mono: ['var(--font-mono)', 'monospace'],
+    extend: {
+      colors: {
+        cotton: '#F7F4EC',
+        ink: '#1C1B19',
+        indigo: '#141414',
+        rust: '#B3261E',
+        line: '#D9D3C4',
+      },
+      fontFamily: {
+        display: ['var(--font-display)', 'serif'],
+        body: ['var(--font-body)', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
+      },
     },
   },
-},
   plugins: [],
 }
 
