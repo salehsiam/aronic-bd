@@ -16,8 +16,8 @@ export default function CartPage() {
   }, [])
 
   const subtotal = mounted ? totalPrice() : 0
-  const shipping = subtotal > 0 ? 80 : 0
-  const total = subtotal + shipping
+  // const shipping = subtotal > 0 ? 80 : 0
+  const total = subtotal
 
   if (!mounted) {
     return null
@@ -32,7 +32,7 @@ export default function CartPage() {
           </div>
           <h1 className="font-display text-2xl text-ink mb-2">Your cart is empty</h1>
           <p className="font-body text-sm text-ink/50 mb-8">
-         You haven't added anything yet. Browse the shop to find something you'll love.
+            You haven't added anything yet. Browse the shop to find something you'll love.
           </p>
           <Link
             href="/shop"
@@ -135,7 +135,7 @@ export default function CartPage() {
               href="/shop"
               className="inline-flex items-center gap-2 mt-6 text-sm font-body text-ink/60 hover:text-ink transition-colors"
             >
-              ← Continue Shopping 
+              ← Continue Shopping
             </Link>
           </div>
 
@@ -151,10 +151,10 @@ export default function CartPage() {
                   <span>Subtotal</span>
                   <span className="font-mono">৳{subtotal}</span>
                 </div>
-                <div className="flex justify-between text-sm font-body text-ink/70">
+                {/* <div className="flex justify-between text-sm font-body text-ink/70">
                   <span>Delivery Charge</span>
                   <span className="font-mono">৳{shipping}</span>
-                </div>
+                </div> */}
               </div>
 
               <div className="flex justify-between items-baseline mt-5 pt-5 border-t border-line">
@@ -166,7 +166,7 @@ export default function CartPage() {
                 href="/checkout"
                 className="mt-6 w-full flex items-center justify-center gap-2 bg-ink text-cotton py-3.5 text-sm font-body hover:bg-indigo transition-colors"
               >
-               Proceed to Checkout <ArrowRight className="w-4 h-4" />
+                Proceed to Checkout <ArrowRight className="w-4 h-4" />
               </Link>
 
               <p className="font-mono text-[11px] text-ink/40 text-center mt-4">

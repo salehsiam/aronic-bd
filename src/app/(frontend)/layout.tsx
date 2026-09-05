@@ -54,7 +54,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       <body className="font-body bg-cotton text-ink">
         <GoogleAnalytics />
         <Header categories={categories} />
-        <main>{children}</main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
         <FacebookMessengerButton />
 
