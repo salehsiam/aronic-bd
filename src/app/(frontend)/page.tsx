@@ -121,7 +121,7 @@ export default async function HomePage() {
               <h2 className="font-display text-3xl text-ink">Top Featured</h2>
             </div>
             <Link
-              href="/shop"
+              href="/featured"
               className="flex items-center gap-1.5 font-body text-sm text-ink/60 hover:text-ink transition-colors"
             >
               View All <ArrowRight className="w-3.5 h-3.5" />
