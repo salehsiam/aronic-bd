@@ -60,10 +60,29 @@ export function AddToCartPanel({ product }: { product: any }) {
   }
 
   const handleBuyNow = () => {
-    handleAddToCart()
-    if (selectedSize && selectedSizeStock >= quantity) {
-      router.push('/cart')
+    if (!selectedSize) {
+      setError('Please select a size.')
+      return
     }
+    if (selectedSizeStock < quantity) {
+      setError('Not enough stock for this size.')
+      return
+    }
+
+    setError('')
+
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        productId: product.id,
+        slug: product.slug,
+        name: product.name,
+        image: image || '',
+        price: product.salePrice || product.price,
+        size: selectedSize,
+      })
+    }
+
+    router.push('/checkout')
   }
 
 

@@ -54,6 +54,12 @@ export default function LoginPage() {
             required
           />
 
+          <div className="text-right">
+            <Link href="/account/forgot-password" className="text-xs font-body text-ink/50 hover:text-ink transition-colors">
+              Forgot password?
+            </Link>
+          </div>
+
           {error && (
             <p className="text-sm font-body text-red-600 bg-red-50 border border-red-200 px-4 py-2.5">
               {error}
