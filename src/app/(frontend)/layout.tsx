@@ -27,7 +27,7 @@ const mono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000'),
   title: {
     default: 'Aronic — Bangladeshi Clothing Brand',
     template: '%s | Aronic',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_BD',
-    url: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    url: process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000',
     siteName: 'Aronic',
   },
   robots: { index: true, follow: true },

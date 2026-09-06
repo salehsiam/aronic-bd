@@ -72,6 +72,65 @@ export const Orders: CollectionConfig = {
           })
         }
 
+        // Notun: Admin ke email notification pathano
+        try {
+          const itemsList = doc.items
+            .map((item: any) => `- ${item.size ? `Size: ${item.size}` : ''} x${item.quantity} — ৳${item.priceAtPurchase}`)
+            .join('\n')
+
+          await req.payload.sendEmail({
+            to: process.env.ADMIN_NOTIFICATION_EMAIL,
+            subject: `New Order: ${doc.orderNumber}`,
+            text: `A new order has been placed on Aronic.
+
+Order Number: ${doc.orderNumber}
+Customer: ${doc.customerName}
+Phone: ${doc.customerPhone}
+Address: ${doc.shippingAddress}
+Payment Method: ${doc.paymentMethod}
+Total: ৳${doc.total}
+
+Items:
+${itemsList}
+
+View in admin panel: ${process.env.NEXT_PUBLIC_PAYLOAD_URL}/admin/collections/orders/${doc.id}`,
+          })
+        } catch (emailError) {
+          console.error('Order notification email failed:', emailError)
+          // Email fail hoyeo order process continue hobe, eta block korbe na
+        }
+        // Notun: Telegram e instant notification pathano
+        try {
+          const itemsListTelegram = doc.items
+            .map((item: any) => `• ${item.size ? `Size: ${item.size}` : ''} x${item.quantity} — ৳${item.priceAtPurchase}`)
+            .join('\n')
+
+          const message = `🛍️ *New Order: ${doc.orderNumber}*
+
+👤 Customer: ${doc.customerName}
+📞 Phone: ${doc.customerPhone}
+📍 Address: ${doc.shippingAddress}
+💳 Payment: ${doc.paymentMethod}
+💰 Total: ৳${doc.total}
+
+Items:
+${itemsListTelegram}
+
+🔗 View: ${process.env.NEXT_PUBLIC_PAYLOAD_URL}/admin/collections/orders/${doc.id}`
+
+          await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: process.env.TELEGRAM_CHAT_ID,
+              text: message,
+              parse_mode: 'Markdown',
+            }),
+          })
+        } catch (telegramError) {
+          console.error('Telegram notification failed:', telegramError)
+          // Telegram fail hoyeo order process continue hobe
+        }
         return doc
       },
     ],

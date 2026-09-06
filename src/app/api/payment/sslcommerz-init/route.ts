@@ -11,7 +11,7 @@ const SSL_API_URL = is_live
 export async function POST(req: NextRequest) {
   try {
     const { orderId, orderNumber, total, customer } = await req.json()
-    const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+    const baseUrl = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000'
 
     const params = new URLSearchParams({
   store_id,
