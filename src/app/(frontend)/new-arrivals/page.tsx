@@ -5,6 +5,7 @@ export const metadata = {
     title: 'New Arrivals',
     description: 'The latest pieces at Aronic.',
 }
+export const dynamic = 'force-dynamic'
 
 export default async function NewArrivalsPage() {
     const products = await getProducts({ sort: 'newest' })

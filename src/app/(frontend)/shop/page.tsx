@@ -1,6 +1,7 @@
 import { getProducts, getCategories } from '@/lib/getProducts'
 import { ProductCard } from "@/components/ui/ProductCard";
 import { ShopFilters } from "@/components/ui/ShopFilters";
+export const dynamic = 'force-dynamic'
 
 
 export default async function ShopPage({

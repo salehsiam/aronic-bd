@@ -1,9 +1,11 @@
 import { getProducts } from '@/lib/getProducts'
 import { ProductCard } from '@/components/ui/ProductCard'
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
     title: 'Featured',
     description: 'Handpicked pieces from Aronic.',
+
 }
 
 export default async function FeaturedPage() {
