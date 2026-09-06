@@ -6,6 +6,7 @@ import { ProductGallery } from '@/components/ui/ProductGallery'
 import { AddToCartPanel } from '@/components/ui/AddToCartPanel'
 import { ProductCard } from '@/components/ui/ProductCard'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+export const dynamic = 'force-dynamic'
 
 
 export async function generateMetadata({

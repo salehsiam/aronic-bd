@@ -138,7 +138,7 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 mt-10 py-5 border-t border-cotton/10">
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-xs font-mono text-cotton/40">
-          <span>© 2026 Aronic. Shokol odhikar songrokkhito.</span>
+          <span>© 2026 Aronic. all right reserved.</span>
           <div className="flex items-center gap-3">
             <span>bKash</span>
             <span>·</span>
