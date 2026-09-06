@@ -21,6 +21,8 @@ import { HeroSlides } from './collections/HeroSlides'
 import { CollectionBanners } from './collections/CollectionBanners'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import nodemailer from 'nodemailer'
+
 
 
 
@@ -86,16 +88,17 @@ export default buildConfig({
   email: nodemailerAdapter({
     defaultFromAddress: process.env.GMAIL_USER || '',
     defaultFromName: 'Aronic',
-    transportOptions: {
+    transport: nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
       secure: true,
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        user: process.env.GMAIL_USER || '',
+        pass: process.env.GMAIL_APP_PASSWORD || '',
       },
-    },
+    }),
   }),
+
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
