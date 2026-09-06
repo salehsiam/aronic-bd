@@ -6,6 +6,7 @@ import { HeroCarousel } from '@/components/ui/HeroCarousel'
 import { FeaturedMarquee } from '@/components/ui/FeaturedMarquee'
 import { CollectionBanner } from '@/components/ui/CollectionBanner'
 import { ProductCard } from '@/components/ui/ProductCard'
+import { StayWithUs } from '@/components/ui/StayWithUs'
 
 
 export default async function HomePage() {
@@ -156,6 +157,9 @@ export default async function HomePage() {
           )}
         </section>
       ))}
+
+      {/* ── STAY WITH US ── */}
+      <StayWithUs />
     </div>
   )
 }

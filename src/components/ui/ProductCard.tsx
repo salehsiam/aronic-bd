@@ -8,7 +8,13 @@ import { Bookmark, Plus, Check } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 
-export function ProductCard({ product }: { product: any }) {
+export function ProductCard({
+  product,
+  onSizeSelectorToggle,
+}: {
+  product: any
+  onSizeSelectorToggle?: (open: boolean) => void
+}) {
   const [showSizes, setShowSizes] = useState(false)
   const [justAdded, setJustAdded] = useState(false)
   const addItem = useCartStore((state) => state.addItem)
@@ -41,6 +47,7 @@ export function ProductCard({ product }: { product: any }) {
     e.stopPropagation()
     if (!inStock) return
     setShowSizes(true)
+    onSizeSelectorToggle?.(true)
   }
 
   const handleSizeSelect = (e: React.MouseEvent, size: string, stock: number) => {
@@ -58,6 +65,7 @@ export function ProductCard({ product }: { product: any }) {
     })
 
     setShowSizes(false)
+    onSizeSelectorToggle?.(false)
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1500)
   }
@@ -110,7 +118,10 @@ export function ProductCard({ product }: { product: any }) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
               className="w-full py-2 flex flex-wrap items-center justify-center gap-1.5"
-              onMouseLeave={() => setShowSizes(false)}
+              onMouseLeave={() => {
+                setShowSizes(false)
+                onSizeSelectorToggle?.(false)
+              }}
             >
               {allSizes.map((s: any) => {
                 const outOfStock = s.stock === 0

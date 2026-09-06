@@ -9,6 +9,7 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
     const [itemsPerPage, setItemsPerPage] = useState(4)
     const [pageIndex, setPageIndex] = useState(0)
     const [direction, setDirection] = useState(1)
+    const [isPaused, setIsPaused] = useState(false)
 
     useEffect(() => {
         const updateItemsPerPage = () => {
@@ -26,13 +27,13 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
     }, [itemsPerPage])
 
     useEffect(() => {
-        if (totalPages <= 1) return
+        if (totalPages <= 1 || isPaused) return
         const timer = setInterval(() => {
             setDirection(1)
             setPageIndex((prev) => (prev + 1) % totalPages)
         }, 4000)
         return () => clearInterval(timer)
-    }, [totalPages, pageIndex])
+    }, [totalPages, pageIndex, isPaused])
 
     if (products.length === 0) return null
 
@@ -93,15 +94,18 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
                             initial={{ opacity: 0, x: direction > 0 ? 40 : -40 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: direction > 0 ? -40 : 40 }}
-                            transition={{ duration: 0.1, ease: 'easeOut' }}
+                            transition={{ duration: 0.05, ease: 'easeOut' }}
                             drag="x"
                             dragConstraints={{ left: 0, right: 0 }}
                             dragElastic={0.15}
                             onDragEnd={handleDragEnd}
+                            onMouseEnter={() => setIsPaused(true)}
+                            onMouseLeave={() => setIsPaused(false)}
+                            onTouchStart={() => setIsPaused(true)}
                             className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12 cursor-grab active:cursor-grabbing touch-pan-y"
                         >
                             {currentItems.map((product) => (
-                                <ProductCard key={product.id} product={product} />
+                                <ProductCard key={product.id} product={product} onSizeSelectorToggle={setIsPaused} />
                             ))}
                         </motion.div>
                     </AnimatePresence>
