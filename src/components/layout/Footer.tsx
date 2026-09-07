@@ -31,7 +31,7 @@ export default function Footer() {
               <div className="flex border border-cotton/25">
                 <input
                   type="email"
-                  placeholder="apnar email"
+                  placeholder="your email"
                   className="flex-1 px-3 py-2 text-sm font-body bg-transparent text-cotton placeholder:text-cotton/40 outline-none"
                 />
                 <button className="px-4 bg-rust text-cotton text-sm font-body hover:bg-rust/90 transition-colors">
@@ -48,11 +48,11 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5 text-sm text-cotton/60">
                 <Mail className="w-4 h-4 text-rust flex-shrink-0" />
-                <span>hello@aronic.com.bd</span>
+                <span>www.aronicofficial.bd@gmail.com</span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-cotton/60">
                 <Phone className="w-4 h-4 text-rust flex-shrink-0" />
-                <span>+880 1XXX-XXXXXX</span>
+                <span>+880 1912-697508</span>
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function Footer() {
             </h4>
             <div className="space-y-2.5">
               {[
-                { label: 'Shob Products', href: '/shop' },
+                { label: 'All Products', href: '/shop' },
                 { label: 'New Arrivals', href: '/shop?sort=newest' },
                 { label: 'Men', href: '/shop?category=men' },
                 { label: 'Women', href: '/shop?category=women' },
@@ -138,8 +138,10 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 mt-10 py-5 border-t border-cotton/10">
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-xs font-mono text-cotton/40">
-          <span>© 2026 Aronic. all right reserved.</span>
-          <div className="flex items-center gap-3">
+          <span>© 2026 Aronic. Shokol odhikar songrokkhito.</span>
+          <div className="flex items-center gap-4">
+            <Link href="/terms" className="hover:text-cotton/70 transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-cotton/70 transition-colors">Privacy</Link>
             <span>bKash</span>
             <span>·</span>
             <span>Nagad</span>

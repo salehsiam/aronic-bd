@@ -67,7 +67,7 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
                                 initial={{ opacity: 0, x: 32 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -16 }}
-                                transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
+                                transition={{ duration: 0.4, delay: 0.05, ease: 'easeOut' }}
                                 className="font-mono text-xs uppercase tracking-widest text-cotton/80 mb-3"
                             >
                                 {slide.eyebrow}
@@ -81,7 +81,7 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
                                     initial={{ opacity: 0, x: 48 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: -16 }}
-                                    transition={{ duration: 0.55, delay: 0.4 + i * 0.1, ease: 'easeOut' }}
+                                    transition={{ duration: 0.45, delay: 0.1 + i * 0.06, ease: 'easeOut' }}
                                     className="block"
                                 >
                                     {line}
@@ -93,7 +93,7 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
                             initial={{ opacity: 0, x: 32 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -16 }}
-                            transition={{ duration: 0.5, delay: 0.65 }}
+                            transition={{ duration: 0.4, delay: 0.25 }}
                         >
                             <Link
                                 href={slide.ctaLink}

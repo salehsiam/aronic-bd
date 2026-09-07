@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion, PanInfo } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ProductCard } from './ProductCard'
@@ -10,6 +10,7 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
     const [pageIndex, setPageIndex] = useState(0)
     const [direction, setDirection] = useState(1)
     const [isPaused, setIsPaused] = useState(false)
+    const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const updateItemsPerPage = () => {
@@ -53,10 +54,8 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
     ) => {
         const swipeThreshold = 50
         if (info.offset.x < -swipeThreshold && pageIndex < totalPages - 1) {
-            // Left e swipe → next page
             goToPage(pageIndex + 1, 1)
         } else if (info.offset.x > swipeThreshold && pageIndex > 0) {
-            // Right e swipe → previous page
             goToPage(pageIndex - 1, -1)
         }
     }
@@ -64,7 +63,6 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
     return (
         <div>
             <div className="relative">
-                {/* Desktop arrow controls */}
                 {totalPages > 1 && (
                     <>
                         <button
@@ -86,7 +84,15 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
                     </>
                 )}
 
-                <div className="overflow-hidden">
+                {/* Pause/resume ekhon ei stable outer div-e, jeta kokhono unmount hoy na */}
+                <div
+                    ref={containerRef}
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
+                    onTouchStart={() => setIsPaused(true)}
+                    onTouchEnd={() => setIsPaused(false)}
+                    className="overflow-hidden"
+                >
                     <AnimatePresence mode="wait" custom={direction}>
                         <motion.div
                             key={pageIndex}
@@ -94,14 +100,10 @@ export function FeaturedMarquee({ products }: { products: any[] }) {
                             initial={{ opacity: 0, x: direction > 0 ? 40 : -40 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: direction > 0 ? -40 : 40 }}
-                            transition={{ duration: 0.05, ease: 'easeOut' }}
-                            drag="x"
+                            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }} drag="x"
                             dragConstraints={{ left: 0, right: 0 }}
                             dragElastic={0.15}
                             onDragEnd={handleDragEnd}
-                            onMouseEnter={() => setIsPaused(true)}
-                            onMouseLeave={() => setIsPaused(false)}
-                            onTouchStart={() => setIsPaused(true)}
                             className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12 cursor-grab active:cursor-grabbing touch-pan-y"
                         >
                             {currentItems.map((product) => (

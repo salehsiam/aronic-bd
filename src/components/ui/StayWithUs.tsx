@@ -120,7 +120,7 @@ export function StayWithUs() {
                         </svg>
                     </a>
                     <a
-                        href="https://wa.me/8801XXXXXXXXX"
+                        href="https://wa.me/8801912697508"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-11 h-11 rounded-full border border-cotton/25 flex items-center justify-center text-cotton/70 hover:text-cotton hover:border-cotton transition-colors"

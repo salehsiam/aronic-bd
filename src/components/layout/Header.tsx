@@ -368,7 +368,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
                 </motion.div>
 
                 <a
-                  href="https://wa.me/8801XXXXXXXXX"
+                  href="https://wa.me/8801912697508"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 text-ink/60 text-sm font-mono py-3"
