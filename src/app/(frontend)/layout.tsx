@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer'
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics'
 import { getCategories } from '@/lib/getProducts'
 import { FacebookMessengerButton } from '@/components/ui/FacebookMessengerButton'
+import { ScrollToTop } from '../../components/ui/ScrollToTop'
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -64,6 +65,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       className={`${fraunces.variable} ${workSans.variable} ${mono.variable}`}
     >
       <body className="font-body bg-cotton text-ink">
+        <ScrollToTop />
         <GoogleAnalytics />
         <Header categories={categories} />
         <main className="min-h-screen">{children}</main>
