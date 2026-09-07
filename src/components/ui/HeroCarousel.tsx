@@ -33,27 +33,16 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
     const imgSrc = slide.mobileImage || slide.desktopImage
 
     return (
-        <div className="relative h-[85vh] min-h-[500px] max-h-[800px] overflow-hidden bg-ink">
-            {/* Left peek strip — permanent blurred sliver, gives "left space" feel */}
-            <div className="absolute inset-y-0 left-0 w-[14%] md:w-[10%] overflow-hidden">
-                <img
-                    src={imgSrc}
-                    alt=""
-                    aria-hidden
-                    className="w-full h-full object-cover scale-125 blur-md opacity-60"
-                />
-                <div className="absolute inset-0 bg-ink/40" />
-            </div>
-
+        <div className="relative h-[85vh] min-h-[420px] md:min-h-[500px] max-h-[800px] overflow-hidden bg-ink">
             {/* Main image — slides in from right, blur clears as it settles */}
-            <div className="absolute inset-y-0 left-[14%] md:left-[10%] right-0 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
                 <AnimatePresence mode="sync">
                     <motion.picture
                         key={slide.id}
                         initial={{ x: '18%', opacity: 0, filter: 'blur(24px)' }}
                         animate={{ x: '0%', opacity: 1, filter: 'blur(0px)' }}
                         exit={{ x: '-8%', opacity: 0, filter: 'blur(12px)' }}
-                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
                         className="absolute inset-0"
                     >
                         <source media="(min-width: 768px)" srcSet={slide.desktopImage} />
@@ -70,7 +59,7 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
             </div>
 
             {/* Text content — slides in from right */}
-            <div className="relative h-full flex flex-col justify-end pl-[18%] md:pl-[14%] pr-6 md:pr-16 pb-20 md:pb-24 max-w-2xl">
+            <div className="relative h-full flex flex-col justify-end pl-10 md:pl-24 pr-6 md:pr-16 pb-10 md:pb-24 max-w-2xl">
                 <AnimatePresence mode="wait">
                     <motion.div key={slide.id}>
                         {slide.eyebrow && (
@@ -85,7 +74,7 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
                             </motion.p>
                         )}
 
-                        <h1 className="font-display text-4xl md:text-7xl text-cotton leading-[1.05]">
+                        <h1 className="font-display text-3xl md:text-7xl text-cotton leading-[1.05]">
                             {lines.map((line, i) => (
                                 <motion.span
                                     key={i}
@@ -108,9 +97,9 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
                         >
                             <Link
                                 href={slide.ctaLink}
-                                className="inline-flex items-center gap-2 border border-cotton text-cotton px-6 md:px-7 py-3 md:py-3.5 text-sm font-body mt-6 md:mt-8 rounded-full hover:bg-cotton hover:text-ink transition-colors"
+                                className="inline-flex items-center gap-2 border border-cotton text-cotton px-5 md:px-7 py-2.5 md:py-3.5 text-xs md:text-sm font-body mt-4 md:mt-8 rounded-full hover:bg-cotton hover:text-ink transition-colors"
                             >
-                                {slide.ctaText} <ArrowRight className="w-4 h-4" />
+                                {slide.ctaText} <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
                             </Link>
                         </motion.div>
                     </motion.div>
@@ -119,13 +108,13 @@ export function HeroCarousel({ slides }: { slides: Slide[] }) {
 
             {/* Progress bar indicators */}
             {slides.length > 1 && (
-                <div className="absolute bottom-6 left-[18%] md:left-[14%] flex gap-2 z-10">
+                <div className="absolute bottom-4 md:bottom-6 left-6 md:left-16 flex gap-2 z-10">
                     {slides.map((_, idx) => (
                         <button
                             key={idx}
                             onClick={() => setActive(idx)}
                             aria-label={`Go to slide ${idx + 1}`}
-                            className="relative h-[3px] w-10 bg-cotton/30 overflow-hidden"
+                            className="relative h-[3px] w-8 md:w-10 bg-cotton/30 overflow-hidden"
                         >
                             {idx === active && (
                                 <motion.div

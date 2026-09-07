@@ -19,7 +19,7 @@ export function CollectionBanner({ image, eyebrow, title, ctaText = 'View All Co
                 alt={title.replace('\n', ' ')}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-ink/50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-ink/50 via-transparent to-ink/70" />
 
             <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
                 {eyebrow && (
