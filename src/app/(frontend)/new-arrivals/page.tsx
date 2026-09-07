@@ -1,14 +1,13 @@
-import { getProducts } from '@/lib/getProducts'
+import { getNewArrivals } from '@/lib/getProducts'
 import { ProductCard } from '@/components/ui/ProductCard'
 
 export const metadata = {
     title: 'New Arrivals',
     description: 'The latest pieces at Aronic.',
 }
-export const dynamic = 'force-dynamic'
 
 export default async function NewArrivalsPage() {
-    const products = await getProducts({ sort: 'newest' })
+    const products = await getNewArrivals()
 
     return (
         <div className="min-h-screen bg-cotton">

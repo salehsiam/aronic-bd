@@ -112,6 +112,14 @@ export const Products: CollectionConfig = {
       defaultValue: false,
     },
     {
+      name: 'isNewArrival',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'On korle New Arrivals page e dekhabe',
+      },
+    },
+    {
       name: 'isActive',
       type: 'checkbox',
       defaultValue: true,

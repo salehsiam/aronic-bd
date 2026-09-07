@@ -161,3 +161,19 @@ export async function getCollectionBanners() {
 
   return result.docs
 }
+
+export async function getNewArrivals() {
+  const payload = await getPayload({ config })
+
+  const result = await payload.find({
+    collection: 'products',
+    where: {
+      and: [{ isActive: { equals: true } }, { isNewArrival: { equals: true } }],
+    },
+    limit: 24,
+    depth: 2,
+    sort: '-createdAt',
+  })
+
+  return result.docs
+}
