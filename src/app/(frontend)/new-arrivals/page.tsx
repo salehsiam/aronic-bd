@@ -1,5 +1,7 @@
 import { getNewArrivals } from '@/lib/getProducts'
 import { ProductCard } from '@/components/ui/ProductCard'
+export const dynamic = 'force-dynamic'
+
 
 export const metadata = {
     title: 'New Arrivals',
