@@ -374,7 +374,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
                   className="flex items-center justify-center gap-2 text-ink/60 text-sm font-mono py-3"
                 >
                   <Phone className="w-3.5 h-3.5" />
-                  +880 1XXX-XXXXXX
+                  +880 1912-697508
                 </a>
               </motion.div>
             </motion.div>
