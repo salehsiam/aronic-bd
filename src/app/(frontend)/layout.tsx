@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer'
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics'
 import { getCategories } from '@/lib/getProducts'
 import { FacebookMessengerButton } from '@/components/ui/FacebookMessengerButton'
-import { ScrollToTop } from '../../components/ui/ScrollToTop'
+import { ScrollToTop } from '@/components/ui/ScrollToTop'
 
 const fraunces = Fraunces({
   subsets: ['latin'],
