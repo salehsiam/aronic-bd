@@ -20,13 +20,13 @@ export default function Footer() {
               Aronic
             </span>
             <p className="text-sm font-body leading-relaxed max-w-sm mt-4">
-              Bangladesh-er jonno banano quality clothing. Comfort, style ar durability — ek jaygay.
+              Thoughtfully crafted clothing for everyday comfort and effortless style.
             </p>
 
             {/* Newsletter */}
             <div className="mt-6 max-w-sm">
               <p className="font-mono text-xs uppercase tracking-widest text-rust mb-2">
-                Notun collection er khobor pete chan?
+                Get the latest drops and collection updates
               </p>
               <div className="flex border border-cotton/25">
                 <input
@@ -48,7 +48,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5 text-sm text-cotton/60">
                 <Mail className="w-4 h-4 text-rust flex-shrink-0" />
-                <span>www.aronicofficial.bd@gmail.com</span>
+                <span>www.aronicbdofficial@gmail.com</span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-cotton/60">
                 <Phone className="w-4 h-4 text-rust flex-shrink-0" />
@@ -109,7 +109,7 @@ export default function Footer() {
             </h4>
             <div className="flex gap-3">
               <a
-                href="https://facebook.com/aronicbd"
+                href="https://facebook.com/aronicclothing"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 border border-cotton/25 flex items-center justify-center hover:bg-cotton/10 transition-colors"
@@ -120,7 +120,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://instagram.com/aronicbd"
+                href="https://instagram.com/aronicbdofficial"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 border border-cotton/25 flex items-center justify-center hover:bg-cotton/10 transition-colors"

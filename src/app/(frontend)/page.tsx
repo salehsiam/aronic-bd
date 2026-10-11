@@ -61,7 +61,7 @@ export default async function HomePage() {
                   key={i}
                   className="font-mono text-xs uppercase tracking-widest text-cotton/90 mx-6"
                 >
-                  Free Delivery Inside Dhaka · Cash on Delivery Available · Easy 7-Day Returns ·
+                  Premium Quality Guaranteed · Cash on Delivery Available · Secure Shopping Experience · 100% Authentic Products ·
                 </span>
               ))}
           </div>

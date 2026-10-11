@@ -1,3 +1,4 @@
+import { pixelEvent } from '@/lib/pixel'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -28,6 +29,14 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       addItem: (item) => {
+        pixelEvent('AddToCart', {
+          content_ids: [item.productId],
+          content_name: item.name,
+          content_type: 'product',
+          value: item.price,
+          currency: 'BDT',
+        })
+
         const existing = get().items.find(
           (i) => i.productId === item.productId && i.size === item.size && i.color === item.color,
         )

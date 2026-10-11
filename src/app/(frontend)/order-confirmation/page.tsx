@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Check } from 'lucide-react'
+import { PurchaseTracker } from '@/components/ui/PurchaseTracker'
 
 export default async function OrderConfirmationPage({
   searchParams,
@@ -11,6 +12,7 @@ export default async function OrderConfirmationPage({
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-cotton px-6">
+      <PurchaseTracker orderNumber={orderNumber} />
       <div className="text-center max-w-md">
         <div className="w-16 h-16 mx-auto mb-6 bg-indigo rounded-full flex items-center justify-center">
           <Check className="w-7 h-7 text-cotton" />

@@ -98,7 +98,7 @@ export function StayWithUs() {
                 {/* Social links */}
                 <div className="flex items-center justify-center gap-4">
                     <a
-                        href="https://facebook.com/aronicbd"
+                        href="https://facebook.com/aronicclothing"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-11 h-11 rounded-full border border-cotton/25 flex items-center justify-center text-cotton/70 hover:text-cotton hover:border-cotton transition-colors"
@@ -109,7 +109,7 @@ export function StayWithUs() {
                         </svg>
                     </a>
                     <a
-                        href="https://instagram.com/aronicbd"
+                        href="https://instagram.com/aronicbdofficial"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-11 h-11 rounded-full border border-cotton/25 flex items-center justify-center text-cotton/70 hover:text-cotton hover:border-cotton transition-colors"

@@ -7,6 +7,7 @@ import GoogleAnalytics from '@/components/ui/GoogleAnalytics'
 import { getCategories } from '@/lib/getProducts'
 import { FacebookMessengerButton } from '@/components/ui/FacebookMessengerButton'
 import { ScrollToTop } from '@/components/ui/ScrollToTop'
+import MetaPixel from '@/components/ui/MetaPixel'
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -67,6 +68,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       <body className="font-body bg-cotton text-ink">
         <ScrollToTop />
         <GoogleAnalytics />
+        <MetaPixel />
         <Header categories={categories} />
         <main className="min-h-screen">{children}</main>
         <Footer />

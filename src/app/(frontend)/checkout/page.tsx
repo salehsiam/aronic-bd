@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useCartStore } from '@/store/cartStore'
 import { getCurrentCustomer } from '@/lib/customerAuth'
+import { pixelEvent } from '@/lib/pixel'
 import { Minus, Plus, X } from 'lucide-react'
 
 const DHAKA_CHARGE = 80
@@ -39,6 +40,23 @@ export default function CheckoutPage() {
     })
   }, [])
 
+  // Checkout page khulle ekbar InitiateCheckout fire hobe
+  useEffect(() => {
+    setMounted(true)
+    getCurrentCustomer().then((c) => {
+      setCustomer(c)
+      if (c) {
+        setForm((prev) => ({ ...prev, name: c.name, email: c.email, phone: c.phone }))
+      }
+    })
+
+    const payment = new URLSearchParams(window.location.search).get('payment')
+    if (payment === 'failed') {
+      setError('Your payment could not be completed. Your cart is saved, please try again.')
+    } else if (payment === 'cancelled') {
+      setError('Payment was cancelled. Your cart is saved. You can try again or choose Cash on Delivery.')
+    }
+  }, [])
   if (!mounted) return null
 
   if (items.length === 0) {
@@ -102,7 +120,6 @@ export default function CheckoutPage() {
       const created = await res.json()
 
       if (paymentMethod === 'sslcommerz') {
-        // SSLCommerz session init korar API call — porer step e banabo
         const sessionRes = await fetch('/api/payment/sslcommerz-init', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -116,13 +133,16 @@ export default function CheckoutPage() {
         const sessionData = await sessionRes.json()
 
         if (sessionData.gatewayUrl) {
-          clearCart()
+          // Purchase event confirmation page e fire hobe, tar jonno order info rakho
+          sessionStorage.setItem('aronic_last_order', JSON.stringify({ orderNumber, total }))
+
           window.location.href = sessionData.gatewayUrl
           return
         } else {
           throw new Error('Something went wrong. Please try again.')
         }
       } else {
+        sessionStorage.setItem('aronic_last_order', JSON.stringify({ orderNumber, total }))
         clearCart()
         router.push(`/order-confirmation?order=${orderNumber}`)
       }

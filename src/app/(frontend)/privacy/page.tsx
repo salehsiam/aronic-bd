@@ -25,8 +25,9 @@ export default function PrivacyPage() {
                         <p>
                             Your information is used to process orders, communicate order updates, respond to
                             customer service requests, and — if you've subscribed — send occasional updates
-                            about new arrivals and offers. We do not sell or rent your personal information to
-                            third parties.
+                            about new arrivals and offers. We also use anonymous usage data and advertising
+                            tools (see Cookies below) to measure and improve our marketing. We do not sell or
+                            rent your personal information to third parties.
                         </p>
                     </section>
 
@@ -39,11 +40,27 @@ export default function PrivacyPage() {
                     </section>
 
                     <section>
-                        <h2 className="font-display text-xl text-ink mb-3">4. Cookies</h2>
+                        <h2 className="font-display text-xl text-ink mb-3">4. Cookies, Analytics & Advertising</h2>
                         <p>
                             We use cookies and browser storage to keep your cart and wishlist saved between
-                            visits, and to understand how visitors use our site. You can disable cookies in
-                            your browser settings, though this may affect site functionality.
+                            visits. We also use third-party tools to understand how visitors use our site and to
+                            show relevant ads:
+                        </p>
+                        <ul className="list-disc pl-5 mt-3 space-y-2">
+                            <li>
+                                <strong className="text-ink">Google Analytics</strong> collects anonymous usage data,
+                                such as pages visited and time spent on the site, to help us improve the website.
+                            </li>
+                            <li>
+                                <strong className="text-ink">Meta Pixel</strong> (Facebook and Instagram) records
+                                actions like viewing a product, adding to cart, and completing a purchase. We use this
+                                to measure our ads and to show our ads to people who may be interested in Aronic.
+                            </li>
+                        </ul>
+                        <p className="mt-3">
+                            These tools may set cookies on your device and share usage data with Google and Meta.
+                            You can opt out of personalised ads through your Facebook ad settings, or disable
+                            cookies in your browser settings, though this may affect site functionality.
                         </p>
                     </section>
 
