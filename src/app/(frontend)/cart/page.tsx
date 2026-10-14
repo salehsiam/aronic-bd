@@ -3,20 +3,75 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Minus, Plus, X, ShoppingBag, ArrowRight } from 'lucide-react'
-import { useCartStore } from '@/store/cartStore'
-import { useState, useEffect } from 'react'
+import { useCartStore, type CartChange } from '@/store/cartStore'
+import { useState, useEffect, useRef } from 'react'
+
+function describeChanges(changes: CartChange[]): string[] {
+  return changes.map((c) => {
+    const label = `${c.name} (${c.size})`
+    if (c.type === 'price') return `${label}: price changed from ৳${c.from} to ৳${c.to}.`
+    if (c.type === 'quantity')
+      return `${label}: only ${c.to} left in stock, quantity reduced from ${c.from}.`
+    return c.reason === 'out_of_stock'
+      ? `${label} is out of stock and was removed.`
+      : `${label} is no longer available and was removed.`
+  })
+}
+
+function CartNotices({ notices, onDismiss }: { notices: string[]; onDismiss: () => void }) {
+  if (notices.length === 0) return null
+
+  return (
+    <div className="mb-8 border border-rust/40 bg-rust/5 p-4">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-widest text-rust mb-2">
+            Cart updated
+          </p>
+          <ul className="space-y-1 font-body text-sm text-ink/80 list-disc pl-5">
+            {notices.map((n, i) => (
+              <li key={i}>{n}</li>
+            ))}
+          </ul>
+        </div>
+        <button
+          type="button"
+          onClick={onDismiss}
+          className="text-ink/40 hover:text-ink transition-colors shrink-0"
+          aria-label="Dismiss"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default function CartPage() {
   const [mounted, setMounted] = useState(false)
-  const { items, removeItem, updateQuantity, totalPrice } = useCartStore()
+  const [checking, setChecking] = useState(true)
+  const [notices, setNotices] = useState<string[]>([])
+  const hasSynced = useRef(false)
+  const { items, removeItem, updateQuantity, totalPrice, syncWithServer } = useCartStore()
 
   // Zustand persist hydration mismatch ekrate hobe (server e empty, client e localStorage theke value)
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  // Cart page khulle latest dam/stock server theke ene cart update hoy
+  useEffect(() => {
+    if (!mounted || hasSynced.current) return
+    hasSynced.current = true
+
+      ; (async () => {
+        const changes = await syncWithServer()
+        if (changes.length > 0) setNotices(describeChanges(changes))
+        setChecking(false)
+      })()
+  }, [mounted, syncWithServer])
+
   const subtotal = mounted ? totalPrice() : 0
-  // const shipping = subtotal > 0 ? 80 : 0
   const total = subtotal
 
   if (!mounted) {
@@ -31,6 +86,13 @@ export default function CartPage() {
             <ShoppingBag className="w-6 h-6 text-ink/40" />
           </div>
           <h1 className="font-display text-2xl text-ink mb-2">Your cart is empty</h1>
+          {notices.length > 0 && (
+            <ul className="mb-4 space-y-1 font-body text-sm text-rust list-none">
+              {notices.map((n, i) => (
+                <li key={i}>{n}</li>
+              ))}
+            </ul>
+          )}
           <p className="font-body text-sm text-ink/50 mb-8">
             You haven't added anything yet. Browse the shop to find something you'll love.
           </p>
@@ -53,7 +115,12 @@ export default function CartPage() {
             {items.reduce((sum, i) => sum + i.quantity, 0)} Item
           </p>
           <h1 className="font-display text-4xl text-ink">Your Cart</h1>
+          {checking && (
+            <p className="font-body text-xs text-ink/40 mt-2">Checking the latest prices...</p>
+          )}
         </div>
+
+        <CartNotices notices={notices} onDismiss={() => setNotices([])} />
 
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Items list */}
@@ -151,14 +218,14 @@ export default function CartPage() {
                   <span>Subtotal</span>
                   <span className="font-mono">৳{subtotal}</span>
                 </div>
-                {/* <div className="flex justify-between text-sm font-body text-ink/70">
-                  <span>Delivery Charge</span>
-                  <span className="font-mono">৳{shipping}</span>
-                </div> */}
+                <div className="flex justify-between text-sm font-body text-ink/70">
+                  <span>Delivery</span>
+                  <span className="font-mono text-ink/50">At checkout</span>
+                </div>
               </div>
 
               <div className="flex justify-between items-baseline mt-5 pt-5 border-t border-line">
-                <span className="font-display text-base text-ink">Total</span>
+                <span className="font-display text-base text-ink">Subtotal</span>
                 <span className="font-mono text-xl text-indigo">৳{total}</span>
               </div>
 

@@ -1,26 +1,47 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { useCartStore } from '@/store/cartStore'
+import { useCartStore, type CartChange } from '@/store/cartStore'
 import { getCurrentCustomer } from '@/lib/customerAuth'
 import { pixelEvent } from '@/lib/pixel'
+import { DELIVERY_CHARGES } from '@/lib/shipping'
 import { Minus, Plus, X } from 'lucide-react'
 
-const DHAKA_CHARGE = 80
-const OUTSIDE_DHAKA_CHARGE = 130
+const BKASH_NUMBER = process.env.NEXT_PUBLIC_BKASH_NUMBER
+const NAGAD_NUMBER = process.env.NEXT_PUBLIC_NAGAD_NUMBER
+
+type PaymentMethod = 'cod' | 'bkash_manual' | 'nagad_manual'
+
+function describeChanges(changes: CartChange[]): string[] {
+  return changes.map((c) => {
+    const label = `${c.name} (${c.size})`
+    if (c.type === 'price') return `${label}: price changed from ৳${c.from} to ৳${c.to}.`
+    if (c.type === 'quantity')
+      return `${label}: only ${c.to} left in stock, quantity reduced from ${c.from}.`
+    return c.reason === 'out_of_stock'
+      ? `${label} is out of stock and was removed.`
+      : `${label} is no longer available and was removed.`
+  })
+}
 
 export default function CheckoutPage() {
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
-  const { items, totalPrice, clearCart, updateQuantity, removeItem } = useCartStore()
+  const { items, totalPrice, clearCart, updateQuantity, removeItem, syncWithServer } =
+    useCartStore()
 
   const [location, setLocation] = useState<'dhaka' | 'outside'>('dhaka')
-  const [paymentMethod, setPaymentMethod] = useState<'sslcommerz' | 'cod'>('cod')
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cod')
+  const [trxId, setTrxId] = useState('')
+  const [senderNumber, setSenderNumber] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [customer, setCustomer] = useState<any>(null)
+  const [syncing, setSyncing] = useState(true)
+  const [notices, setNotices] = useState<string[]>([])
+  const hasSynced = useRef(false)
 
   const [form, setForm] = useState({
     name: '',
@@ -38,37 +59,63 @@ export default function CheckoutPage() {
         setForm((prev) => ({ ...prev, name: c.name, email: c.email, phone: c.phone }))
       }
     })
-  }, [])
-
-  // Checkout page khulle ekbar InitiateCheckout fire hobe
-  useEffect(() => {
-    setMounted(true)
-    getCurrentCustomer().then((c) => {
-      setCustomer(c)
-      if (c) {
-        setForm((prev) => ({ ...prev, name: c.name, email: c.email, phone: c.phone }))
-      }
-    })
 
     const payment = new URLSearchParams(window.location.search).get('payment')
     if (payment === 'failed') {
       setError('Your payment could not be completed. Your cart is saved, please try again.')
     } else if (payment === 'cancelled') {
-      setError('Payment was cancelled. Your cart is saved. You can try again or choose Cash on Delivery.')
+      setError('Payment was cancelled. Your cart is saved. You can try again.')
     }
   }, [])
+
+  // Checkout khulle prothome latest dam/stock server theke ene cart update hoy
+  useEffect(() => {
+    if (!mounted || hasSynced.current) return
+    hasSynced.current = true
+
+      ; (async () => {
+        const changes = await syncWithServer()
+        if (changes.length > 0) setNotices(describeChanges(changes))
+        setSyncing(false)
+
+        // InitiateCheckout ekhon fire hoy, jate Meta-te update kora dam jay
+        const latest = useCartStore.getState()
+        if (latest.items.length > 0) {
+          pixelEvent('InitiateCheckout', {
+            num_items: latest.items.reduce((sum, i) => sum + i.quantity, 0),
+            value: latest.totalPrice(),
+            currency: 'BDT',
+          })
+        }
+      })()
+  }, [mounted, syncWithServer])
+
   if (!mounted) return null
 
   if (items.length === 0) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center bg-cotton px-6">
+      <div className="min-h-[70vh] flex flex-col items-center justify-center gap-3 bg-cotton px-6 text-center">
         <p className="font-body text-ink/50">Your cart is empty — nothing to checkout</p>
+        {notices.map((n, i) => (
+          <p key={i} className="font-body text-sm text-rust max-w-md">
+            {n}
+          </p>
+        ))}
       </div>
     )
   }
 
+  if (syncing) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center bg-cotton px-6">
+        <p className="font-body text-sm text-ink/50">Checking the latest prices...</p>
+      </div>
+    )
+  }
+
+  const isManual = paymentMethod === 'bkash_manual' || paymentMethod === 'nagad_manual'
   const subtotal = totalPrice()
-  const deliveryCharge = location === 'dhaka' ? DHAKA_CHARGE : OUTSIDE_DHAKA_CHARGE
+  const deliveryCharge = DELIVERY_CHARGES[location]
   const total = subtotal + deliveryCharge
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -84,14 +131,30 @@ export default function CheckoutPage() {
       return
     }
 
+    if (isManual && trxId.trim().length < 6) {
+      setError('Please enter the transaction ID from your bKash/Nagad payment.')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
+      // Order dewar thik age abar check, majhkhane dam/stock bodle thakle
+      const changes = await syncWithServer()
+      if (changes.length > 0) {
+        setNotices(describeChanges(changes))
+        setError(
+          'Your cart was updated with the latest prices and stock. Please review the total and confirm again.',
+        )
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+
       const orderNumber = `ARN-${Date.now()}`
 
       const orderData = {
         orderNumber,
-        customer: customer?.id || undefined, // logged in thakle customer attach hobe
+        customer: customer?.id || undefined,
         customerName: form.name,
         customerPhone: form.phone,
         customerEmail: form.email || undefined,
@@ -103,8 +166,11 @@ export default function CheckoutPage() {
           quantity: item.quantity,
           priceAtPurchase: item.price,
         })),
+        deliveryArea: location,
         total,
         paymentMethod,
+        transactionId: isManual ? trxId.trim() : undefined,
+        senderNumber: isManual ? senderNumber.trim() : undefined,
         paymentStatus: 'pending',
         status: 'pending',
       }
@@ -115,37 +181,16 @@ export default function CheckoutPage() {
         body: JSON.stringify(orderData),
       })
 
-      if (!res.ok) throw new Error('Something went wrong. Please try again.')
-
-      const created = await res.json()
-
-      if (paymentMethod === 'sslcommerz') {
-        const sessionRes = await fetch('/api/payment/sslcommerz-init', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderId: created.doc.id,
-            orderNumber,
-            total,
-            customer: form,
-          }),
-        })
-        const sessionData = await sessionRes.json()
-
-        if (sessionData.gatewayUrl) {
-          // Purchase event confirmation page e fire hobe, tar jonno order info rakho
-          sessionStorage.setItem('aronic_last_order', JSON.stringify({ orderNumber, total }))
-
-          window.location.href = sessionData.gatewayUrl
-          return
-        } else {
-          throw new Error('Something went wrong. Please try again.')
-        }
-      } else {
-        sessionStorage.setItem('aronic_last_order', JSON.stringify({ orderNumber, total }))
-        clearCart()
-        router.push(`/order-confirmation?order=${orderNumber}`)
+      if (!res.ok) {
+        const errData = await res.json().catch(() => null)
+        throw new Error(
+          errData?.errors?.[0]?.message || 'Something went wrong. Please try again.',
+        )
       }
+
+      sessionStorage.setItem('aronic_last_order', JSON.stringify({ orderNumber, total }))
+      clearCart()
+      router.push(`/order-confirmation?order=${orderNumber}`)
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {
@@ -157,6 +202,31 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-cotton">
       <div className="max-w-6xl mx-auto px-6 pt-16 pb-24">
         <h1 className="font-display text-4xl text-ink mb-10">Checkout</h1>
+
+        {notices.length > 0 && (
+          <div className="mb-8 border border-rust/40 bg-rust/5 p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-mono text-xs uppercase tracking-widest text-rust mb-2">
+                  Cart updated
+                </p>
+                <ul className="space-y-1 font-body text-sm text-ink/80 list-disc pl-5">
+                  {notices.map((n, i) => (
+                    <li key={i}>{n}</li>
+                  ))}
+                </ul>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNotices([])}
+                className="text-ink/40 hover:text-ink transition-colors shrink-0"
+                aria-label="Dismiss"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-12">
           {/* Left: Form */}
@@ -220,23 +290,25 @@ export default function CheckoutPage() {
                   type="button"
                   onClick={() => setLocation('dhaka')}
                   className={`flex-1 border px-4 py-3 text-sm font-body text-left transition-colors ${location === 'dhaka'
-                    ? 'border-indigo bg-indigo/5 text-ink'
-                    : 'border-ink/20 text-ink/60'
+                      ? 'border-indigo bg-indigo/5 text-ink'
+                      : 'border-ink/20 text-ink/60'
                     }`}
                 >
                   <span className="block font-medium">Inside Dhaka</span>
-                  <span className="font-mono text-xs text-ink/50">৳{DHAKA_CHARGE}</span>
+                  <span className="font-mono text-xs text-ink/50">৳{DELIVERY_CHARGES.dhaka}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setLocation('outside')}
                   className={`flex-1 border px-4 py-3 text-sm font-body text-left transition-colors ${location === 'outside'
-                    ? 'border-indigo bg-indigo/5 text-ink'
-                    : 'border-ink/20 text-ink/60'
+                      ? 'border-indigo bg-indigo/5 text-ink'
+                      : 'border-ink/20 text-ink/60'
                     }`}
                 >
                   <span className="block font-medium">Outside Dhaka</span>
-                  <span className="font-mono text-xs text-ink/50">৳{OUTSIDE_DHAKA_CHARGE}</span>
+                  <span className="font-mono text-xs text-ink/50">
+                    ৳{DELIVERY_CHARGES.outside}
+                  </span>
                 </button>
               </div>
             </div>
@@ -247,46 +319,60 @@ export default function CheckoutPage() {
                 Payment Method
               </h2>
               <div className="space-y-3">
-                <label
-                  className={`flex items-center gap-3 border px-4 py-3.5 cursor-pointer transition-colors ${paymentMethod === 'cod' ? 'border-indigo bg-indigo/5' : 'border-ink/20'
-                    }`}
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    checked={paymentMethod === 'cod'}
-                    onChange={() => setPaymentMethod('cod')}
-                    className="accent-indigo"
-                  />
-                  <div>
-                    <span className="block text-sm font-body text-ink">Cash on Delivery</span>
-                    <span className="block text-xs font-body text-ink/50">
-                      Pay in cash when your order arrives
-                    </span>
-                  </div>
-                </label>
-
-                <label
-                  className={`flex items-center gap-3 border px-4 py-3.5 cursor-pointer transition-colors ${paymentMethod === 'sslcommerz' ? 'border-indigo bg-indigo/5' : 'border-ink/20'
-                    }`}
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    checked={paymentMethod === 'sslcommerz'}
-                    onChange={() => setPaymentMethod('sslcommerz')}
-                    className="accent-indigo"
-                  />
-                  <div>
-                    <span className="block text-sm font-body text-ink">
-                      Online Payment (bKash / Nagad / Card)
-                    </span>
-                    <span className="block text-xs font-body text-ink/50">
-                      Pay securely via SSLCommerz
-                    </span>
-                  </div>
-                </label>
+                {[
+                  { value: 'cod', title: 'Cash on Delivery', desc: 'Pay in cash when your order arrives' },
+                  { value: 'bkash_manual', title: 'bKash', desc: 'Send money, then enter your transaction ID' },
+                  { value: 'nagad_manual', title: 'Nagad', desc: 'Send money, then enter your transaction ID' },
+                ].map((opt) => (
+                  <label
+                    key={opt.value}
+                    className={`flex items-center gap-3 border px-4 py-3.5 cursor-pointer transition-colors ${paymentMethod === opt.value ? 'border-indigo bg-indigo/5' : 'border-ink/20'
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="payment"
+                      checked={paymentMethod === opt.value}
+                      onChange={() => setPaymentMethod(opt.value as PaymentMethod)}
+                      className="accent-indigo"
+                    />
+                    <div>
+                      <span className="block text-sm font-body text-ink">{opt.title}</span>
+                      <span className="block text-xs font-body text-ink/50">{opt.desc}</span>
+                    </div>
+                  </label>
+                ))}
               </div>
+
+              {isManual && (
+                <div className="mt-4 border border-line p-4 space-y-4">
+                  <p className="font-body text-sm text-ink/70 leading-relaxed">
+                    Open your {paymentMethod === 'bkash_manual' ? 'bKash' : 'Nagad'} app, choose{' '}
+                    <strong className="text-ink">Send Money</strong>, and send exactly{' '}
+                    <strong className="text-ink font-mono">৳{total}</strong> to{' '}
+                    <strong className="text-ink font-mono">
+                      {paymentMethod === 'bkash_manual' ? BKASH_NUMBER : NAGAD_NUMBER}
+                    </strong>
+                    . Then enter the transaction ID below.
+                  </p>
+                  <input
+                    value={trxId}
+                    onChange={(e) => setTrxId(e.target.value)}
+                    placeholder="Transaction ID (TrxID)"
+                    className="w-full border border-ink/20 px-4 py-3 text-sm font-mono bg-cotton outline-none focus:border-indigo transition-colors"
+                  />
+                  <input
+                    value={senderNumber}
+                    onChange={(e) => setSenderNumber(e.target.value)}
+                    placeholder="Number you paid from (optional)"
+                    className="w-full border border-ink/20 px-4 py-3 text-sm font-body bg-cotton outline-none focus:border-indigo transition-colors"
+                  />
+                  <p className="font-body text-xs text-ink/50">
+                    We'll verify your payment before shipping. Delivery charge is included in the
+                    amount above.
+                  </p>
+                </div>
+              )}
             </div>
 
             {error && (

@@ -277,6 +277,10 @@ export interface Product {
   sku?: string | null;
   isFeatured?: boolean | null;
   /**
+   * On korle New Arrivals page e dekhabe
+   */
+  isNewArrival?: boolean | null;
+  /**
    * Off korle product shop e dekhabe na
    */
   isActive?: boolean | null;
@@ -319,8 +323,22 @@ export interface Order {
     priceAtPurchase: number;
     id?: string | null;
   }[];
+  deliveryArea?: ('dhaka' | 'outside') | null;
+  /**
+   * Server automatic hisab kore
+   */
+  subtotal?: number | null;
+  deliveryCharge?: number | null;
   total: number;
-  paymentMethod: 'sslcommerz' | 'cod';
+  paymentMethod: 'cod' | 'bkash_manual' | 'nagad_manual' | 'sslcommerz';
+  /**
+   * Customer-er dewa TrxID. bKash/Nagad app-e mil-iye tarpor Payment Status "paid" koro.
+   */
+  transactionId?: string | null;
+  /**
+   * Je number theke taka pathano hoyeche
+   */
+  senderNumber?: string | null;
   paymentStatus?: ('pending' | 'paid' | 'failed') | null;
   status?: ('pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled') | null;
   updatedAt: string;
@@ -627,6 +645,7 @@ export interface ProductsSelect<T extends boolean = true> {
       };
   sku?: T;
   isFeatured?: T;
+  isNewArrival?: T;
   isActive?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -664,8 +683,13 @@ export interface OrdersSelect<T extends boolean = true> {
         priceAtPurchase?: T;
         id?: T;
       };
+  deliveryArea?: T;
+  subtotal?: T;
+  deliveryCharge?: T;
   total?: T;
   paymentMethod?: T;
+  transactionId?: T;
+  senderNumber?: T;
   paymentStatus?: T;
   status?: T;
   updatedAt?: T;

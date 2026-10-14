@@ -2,59 +2,49 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
+export const dynamic = 'force-dynamic'
+
+type InItem = { productId: string; size: string; quantity: number }
+
 export async function POST(req: NextRequest) {
   try {
-    const { orderNumber, phone } = await req.json()
-
-    if (!orderNumber || !phone) {
-      return NextResponse.json(
-        { error: 'Order number and phone number are required.' },
-        { status: 400 },
-      )
-    }
+    const body = await req.json()
+    const items: InItem[] = Array.isArray(body?.items) ? body.items.slice(0, 50) : []
 
     const payload = await getPayload({ config })
 
-    const result = await payload.find({
-      collection: 'orders',
-      where: {
-        and: [
-          { orderNumber: { equals: orderNumber.trim() } },
-          { customerPhone: { equals: phone.trim() } },
-        ],
-      },
-      depth: 1,
-      limit: 1,
-    })
+    const results = await Promise.all(
+      items.map(async (item) => {
+        const productId = String(item.productId)
+        const size = String(item.size)
 
-    const order = result.docs[0]
+        const product: any = await payload
+          .findByID({ collection: 'products', id: productId, depth: 1 })
+          .catch(() => null)
 
-    if (!order) {
-      return NextResponse.json(
-        { error: 'No order found. Check your order number and phone.' },
-        { status: 404 },
-      )
-    }
+        if (!product || product.isActive === false) {
+          return { productId, size, status: 'unavailable' as const }
+        }
 
-    // Shudhu proyojoniyo field pathacchi, shomponno customer object na
-    return NextResponse.json({
-      orderNumber: order.orderNumber,
-      status: order.status,
-      paymentStatus: order.paymentStatus,
-      paymentMethod: order.paymentMethod,
-      total: order.total,
-      shippingAddress: order.shippingAddress,
-      createdAt: order.createdAt,
-      items: order.items.map((item: any) => ({
-        name: typeof item.product === 'object' ? item.product.name : 'Product',
-        size: item.size,
-        color: item.color,
-        quantity: item.quantity,
-        priceAtPurchase: item.priceAtPurchase,
-      })),
-    })
-  } catch (error: any) {
-    console.error('Track order error:', error)
-    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
+        const sizeEntry = product.sizes?.find((s: any) => s.size === size)
+        const stock = Number(sizeEntry?.stock ?? 0)
+        const price =
+          product.salePrice && product.salePrice > 0 ? product.salePrice : product.price
+
+        return {
+          productId,
+          size,
+          status: stock > 0 ? ('ok' as const) : ('out_of_stock' as const),
+          price,
+          stock,
+          name: product.name,
+        }
+      }),
+    )
+
+    return NextResponse.json({ results })
+  } catch (error) {
+    console.error('Cart validate error:', error)
+    return NextResponse.json({ error: 'Could not validate cart.' }, { status: 500 })
   }
 }

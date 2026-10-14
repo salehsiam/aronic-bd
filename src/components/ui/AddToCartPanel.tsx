@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Heart, Minus, Plus, Check } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
+import { SizeGuideModal } from './SizeGuideModal'
 
 export function AddToCartPanel({ product }: { product: any }) {
   const router = useRouter()
@@ -20,6 +21,7 @@ export function AddToCartPanel({ product }: { product: any }) {
   //   product.colors?.[0]?.colorName || null,
   // )
   const [quantity, setQuantity] = useState(1)
+  const [guideOpen, setGuideOpen] = useState(false)
 
   const [justAdded, setJustAdded] = useState(false)
   const [error, setError] = useState('')
@@ -139,9 +141,18 @@ export function AddToCartPanel({ product }: { product: any }) {
       {/* Size selector */}
       {availableSizes.length > 0 && (
         <div className="mb-6">
-          <p className="font-mono text-xs uppercase tracking-widest text-ink/50 mb-3">
-            Size: <span className="text-ink normal-case">{selectedSize || 'Select a size'}</span>
-          </p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-ink/50">
+              Size: <span className="text-ink normal-case">{selectedSize || 'Select a size'}</span>
+            </p>
+            <button
+              type="button"
+              onClick={() => setGuideOpen(true)}
+              className="font-body text-xs text-indigo underline underline-offset-4 hover:text-ink transition-colors"
+            >
+              Size guide
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
             {availableSizes.map((s: any) => {
               const outOfStock = s.stock === 0
@@ -236,6 +247,12 @@ export function AddToCartPanel({ product }: { product: any }) {
           <Heart className={`w-4 h-4 ${wishlisted ? 'fill-rust text-rust' : 'text-ink'}`} />
         </button>
       </div>
+      <SizeGuideModal
+        open={guideOpen}
+        onClose={() => setGuideOpen(false)}
+        categorySlug={(product.category as any)?.slug}
+        selectedSize={selectedSize}
+      />
     </div>
   )
 }
