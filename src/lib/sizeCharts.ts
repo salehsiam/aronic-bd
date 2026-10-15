@@ -1,6 +1,6 @@
 export type SizeRow = { size: string; chest: number; length: number; shoulder: number }
 
-export type SizeChartKey = 'sportsware' | 'hoodie'
+export type SizeChartKey = 'sportswear' | 'hoodie'
 
 export type SizeChart = {
     key: SizeChartKey
@@ -9,9 +9,9 @@ export type SizeChart = {
 }
 
 export const SIZE_CHARTS: Record<SizeChartKey, SizeChart> = {
-    sportsware: {
-        key: 'sportsware',
-        title: 'Sportsware',
+    sportswear: {
+        key: 'sportswear',
+        title: 'Sportswear',
         rows: [
             { size: 'S', chest: 38, length: 26, shoulder: 18 },
             { size: 'M', chest: 40, length: 27, shoulder: 19 },
@@ -35,5 +35,5 @@ export const SIZE_CHARTS: Record<SizeChartKey, SizeChart> = {
 
 // Category slug dekhe kon chart dekhabe. Tomar slug onno hole ekhane mil-iye nao.
 export function getChartKey(categorySlug?: string): SizeChartKey {
-    return categorySlug?.toLowerCase().includes('hood') ? 'hoodie' : 'sportsware'
+    return categorySlug?.toLowerCase().includes('hood') ? 'hoodie' : 'sportswear'
 }

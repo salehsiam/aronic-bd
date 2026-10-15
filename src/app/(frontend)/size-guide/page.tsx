@@ -19,7 +19,7 @@ export default function SizeGuidePage() {
                 </p>
 
                 <div className="space-y-12">
-                    <SizeChartTable chart={SIZE_CHARTS.tshirt} />
+                    <SizeChartTable chart={SIZE_CHARTS.sportswear} />
                     <SizeChartTable chart={SIZE_CHARTS.hoodie} />
                 </div>
 
